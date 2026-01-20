@@ -15,7 +15,7 @@
                     <li><a href="#about" :class="linkClass('about')">About me</a></li>
                     <li><a href="#portfolio" :class="linkClass('portfolio')">Portfolio</a></li>
                     <li><a href="#services" :class="linkClass('services')">Services</a></li>
-                    <li><a href="#blog" :class="linkClass('updates')">Updates</a></li>
+                    <li><a href="#updates" :class="linkClass('updates')">Updates</a></li>
                     <li><a href="#contact" :class="linkClass('contact')">Contact</a></li>
                     <!-- Theme toggle button -->
                     <button class="theme-toggle" @click="toggleTheme">
@@ -108,6 +108,10 @@ onUnmounted(() => {
     background-color: transparent;
 }
 
+.nav-desktop a {
+    font-size: clamp(1.1rem, 1.2vw, 1.4rem);
+}
+
 .navbar.scrolled {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -149,7 +153,7 @@ onUnmounted(() => {
 /* Hover effect */
 .nav-link.inactive:hover {
     color: rgba(255, 255, 255, 0.75);
-    /* highlight on hover */
+    transition: color 0.3s ease;
 }
 
 .nav-link::after {

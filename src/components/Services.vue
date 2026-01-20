@@ -1,6 +1,7 @@
 <template>
     <section id="services" class="services-section">
-        <h2 class="section-title">WHAT I DO</h2>
+        <h1 class="section-title">SERVICES</h1>
+        <p class="subtitle">WHAT I DO</p>
 
         <div class="services-grid">
             <div v-for="service in services" :key="service.title" class="service-card">
@@ -63,9 +64,16 @@ const services = [
     padding-bottom: 160px;
 }
 
+.subtitle {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 1rem;
+}
+
 .section-title {
     font-size: 2.5rem;
-    margin-bottom: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
     color: #222;
 }
 

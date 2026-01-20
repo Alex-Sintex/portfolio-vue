@@ -33,6 +33,7 @@ import VueEasyLightbox from 'vue-easy-lightbox'
 import dontacoLogin from '@/assets/images/portfolio/web/dontaco.png'
 import academic_system from '@/assets/images/portfolio/web/academic_system.png'
 import iautism from '@/assets/images/portfolio/mobile/iautism.png'
+import itracker from '@/assets/images/portfolio/mobile/itracker.png'
 
 const categories = ['Web Apps', 'Mobile Apps']
 const selectedCategory = ref('Web Apps')
@@ -40,8 +41,8 @@ const selectedCategory = ref('Web Apps')
 const projects = [
     { title: 'Accounting System', category: 'Web Apps', image: dontacoLogin },
     { title: 'Academic System Administration', category: 'Web Apps', image: academic_system },
-    { title: 'IAutism App – Apoyo Terapéutico para TEA', category: 'Mobile Apps', image: iautism },
-    { title: 'Recipe App UI', category: 'Mobile Apps', image: '/images/recipe-app.png' }
+    { title: 'IAutism App – Therapeutic support for children with TEA', category: 'Mobile Apps', image: iautism },
+    { title: 'iTracker app - Money saver', category: 'Mobile Apps', image: itracker }
 ]
 
 const filteredProjects = computed(() =>
@@ -149,6 +150,7 @@ function showLightbox(i) {
 @media (max-width: 768px) {
     .gallery-item {
         height: 200px;
+        padding: 4rem;
     }
 }
 </style>

@@ -12,31 +12,48 @@
     <div class="curtain right"></div>
   </div>
 
+  <!-- GLOBAL TOAST -->
+  <transition name="toast">
+    <div v-if="toast.show" :class="['toast', toast.type]">
+      {{ toast.message }}
+    </div>
+  </transition>
+
   <!-- SITE CONTENT (UNCHANGED) -->
   <div class="site">
     <Navbar />
 
     <section id="home" class="hero">
       <Hero />
-      <Wave />
+      <WaveBottom />
     </section>
 
     <section id="about" class="about fade-in-section">
-      <Wave />
+      <WaveTop />
       <About />
+      <WaveBottom />
     </section>
 
     <section id="portfolio" class="portfolio fade-in-section">
-      <Wave />
+      <WaveTop />
       <Portfolio />
+      <WaveBottom />
     </section>
 
     <section id="services" class="services fade-in-section">
-      <Wave />
+      <WaveTop />
       <Services />
+      <WaveBottom />
+    </section>
+
+    <section id="updates" class="updates fade-in-section">
+      <WaveTop />
+      <Updates />
+      <WaveBottom />
     </section>
 
     <section id="contact" class="contact fade-in-section">
+      <WaveTop />
       <Contact />
     </section>
 
@@ -46,15 +63,37 @@
 
 <script setup>
 import Navbar from './components/Navbar.vue'
-import Wave from './components/Wave.vue'
 import Hero from './components/Hero.vue'
 import About from './components/About.vue'
 import Footer from './components/Footer.vue'
 import Portfolio from './components/Portfolio.vue'
 import Services from './components/Services.vue'
+import Updates from './components/Updates.vue'
 import Contact from './components/Contact.vue'
-
+import WaveTop from './components/WaveTop.vue'
+import WaveBottom from './components/WaveBottom.vue'
 import { ref, onMounted } from 'vue'
+import { reactive, provide } from 'vue'
+
+// TOAST STATE
+const toast = reactive({
+  show: false,
+  type: 'success', // success | error
+  message: ''
+})
+
+// PROVIDE FUNCTION
+function showToast(type, message) {
+  toast.type = type
+  toast.message = message
+  toast.show = true
+
+  setTimeout(() => {
+    toast.show = false
+  }, 3500)
+}
+
+provide('showToast', showToast)
 
 const loading = ref(true)
 
@@ -221,5 +260,40 @@ body {
   padding: 0;
   box-sizing: border-box;
   scroll-behavior: smooth;
+}
+
+/* =========================
+   TOAST
+========================= */
+.toast {
+  position: fixed;
+  top: 6rem;
+  right: 1.5rem;
+  z-index: 999999;
+  background: #111;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 3px;
+  font-size: 1rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+.toast.success {
+  border-left: 8px solid #22c55e;
+}
+
+.toast.error {
+  border-left: 8px solid #ef4444;
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateY(-12px);
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.35s ease;
 }
 </style>

@@ -2,6 +2,9 @@
     <div class="hero">
         <div class="overlay">
             <div class="intro">
+                <button class="scroll-indicator" @click="scrollToNext">
+                    <span class="arrow"></span>
+                </button>
                 <h1 class="text-uppercase">Kevin Alexis</h1>
                 <p class="typewriter">{{ typedText }}</p>
             </div>
@@ -23,6 +26,13 @@ const typedText = ref('')
 let textIndex = 0
 let charIndex = 0
 let isDeleting = false
+
+function scrollToNext() {
+    const nextSection = document.querySelector('#about')
+    if (nextSection) {
+        nextSection.scrollIntoView({ behavior: 'smooth' })
+    }
+}
 
 function typeEffect() {
     const currentText = texts[textIndex]
@@ -92,6 +102,48 @@ onMounted(() => {
 .intro h2 {
     font-size: 3rem;
     margin-bottom: 0.5rem;
+}
+
+/* =========================
+   SCROLL ARROW (MINIMAL)
+========================= */
+.scroll-indicator {
+    position: absolute;
+    bottom: 150px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* ARROW SHAPE */
+.arrow {
+    display: block;
+    width: 22px;
+    height: 22px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg);
+    animation: fadeArrow 1.8s infinite ease-in-out;
+}
+
+/* FADE IN / OUT */
+@keyframes fadeArrow {
+    0% {
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    60% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }
 
 .typewriter {

@@ -5,8 +5,8 @@
         </button>
         <!-- TOP WAVE -->
         <div class="wave-container">
-            <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
-                <path d="M0,80 C240,20 480,140 720,80 960,20 1200,140 1440,80 L1440,0 L0,0 Z" fill="#f9f9f9" />
+            <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path d="M0,40 C120,80 360,0 600,20 840,40 1080,80 1440,40 L1440,0 L0,0 Z" :fill="waveFooter" />
             </svg>
         </div>
 
@@ -18,6 +18,7 @@
 </template>
 
 <script setup>
+const waveFooter = 'var(--wave-footer)'
 function scrollToTop() {
     window.scrollTo({
         top: 0,
@@ -30,7 +31,7 @@ function scrollToTop() {
 /* FOOTER BASE */
 .footer {
     position: relative;
-    background: #111;
+    background: var(--wave-footer-bg);
     color: #999;
     text-align: center;
     padding-top: 80px;
@@ -49,7 +50,7 @@ function scrollToTop() {
 .wave-container svg {
     display: block;
     width: 100%;
-    height: 120px;
+    height: 180px;
 }
 
 /* CONTENT */
@@ -70,6 +71,7 @@ function scrollToTop() {
     border: none;
     cursor: pointer;
     padding: 0;
+    z-index: 10;
 }
 
 /* ARROW SHAPE (UP) */

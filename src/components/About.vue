@@ -73,11 +73,11 @@
 <style scoped>
 .about-wrapper {
     padding: 4rem 2rem;
-    background-color: #f9f9f9;
-    color: #333;
+    background-color: var(--bg-main);
+    color: var(--text-main);
     font-family: 'Helvetica Neue', sans-serif;
-    padding-top: 120px;
     padding-bottom: 160px;
+    padding-top: 120px;
 }
 
 .img {
@@ -89,7 +89,7 @@
     font-size: 2.5rem;
     text-align: center;
     margin-bottom: 3rem;
-    color: #222;
+    color: var(--text-main);
 }
 
 .about-content {
@@ -97,7 +97,16 @@
     flex-wrap: wrap;
     gap: 3rem;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+}
+
+.profile-pic {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 0.75rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .left-column {
@@ -105,14 +114,6 @@
     min-width: 280px;
     text-align: center;
     position: relative;
-}
-
-.profile-pic {
-    width: 320px;
-    height: 320px;
-    object-fit: cover;
-    border-radius: 0.75rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Badge container positioned at top center */
@@ -129,7 +130,7 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background-color: #333;
+    background-color: var(--orbit-badge-bg);
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
     display: flex;
     align-items: center;
@@ -152,7 +153,7 @@
 }
 
 .orbit-text {
-    fill: #fff;
+    fill: var(--orbit-text);
     font-size: 6px;
     font-weight: bold;
     text-transform: uppercase;
@@ -196,6 +197,7 @@
 }
 
 .bio {
+    color: var(--text-muted);
     font-size: 1.1rem;
     line-height: 1.6;
     margin-bottom: 2rem;
@@ -211,22 +213,22 @@
 .info-box {
     flex: 1;
     min-width: 180px;
-    background-color: #fff;
-    padding: 1.5rem;
+    background-color: var(--card-bg);
+    border-color: var(--text-main);
     border-radius: 0.75rem;
     border-style: solid;
-    border-color: rgba(51, 51, 51, 1);
+    padding: 1.5rem;
 }
 
 .info-box:hover {
     transform: translateY(-4px);
-    box-shadow: 4px 4px 0 rgba(51, 51, 51, 1);
+    box-shadow: 4px 4px 0 var(--text-main);
 }
 
 .info-box h3 {
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
-    color: #222;
+    color: var(--text-main);
 }
 
 .tools {
@@ -240,9 +242,9 @@
     width: 60px;
     height: 60px;
     padding: 0.5rem;
-    border: 2px solid #333;
     border-radius: 0.75rem;
-    background-color: #fff;
+    border: 2px solid var(--text-main);
+    background-color: var(--tool-icon-bg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -250,7 +252,7 @@
 }
 
 .tool-icon:hover {
-    box-shadow: 4px 4px 0 rgba(51, 51, 51, 1);
+    box-shadow: 4px 4px 0 var(--text-main);
     transform: translateY(-2px);
 }
 

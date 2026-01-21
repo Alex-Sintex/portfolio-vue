@@ -58,7 +58,8 @@ const services = [
 <style scoped>
 .services-section {
     padding: 4rem 2rem;
-    background-color: #f9f9f9;
+    background-color: var(--bg-main);
+    color: var(--text-main);
     text-align: center;
     padding-top: 120px;
     padding-bottom: 160px;
@@ -66,7 +67,7 @@ const services = [
 
 .subtitle {
     font-size: 1.2rem;
-    color: #555;
+    color: var(--text-muted);
     margin-bottom: 1rem;
 }
 
@@ -74,7 +75,7 @@ const services = [
     font-size: 2.5rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
-    color: #222;
+    color: var(--text-main);
 }
 
 .services-grid {
@@ -87,7 +88,7 @@ const services = [
     text-align: center;
     padding: 30px 20px;
     margin-bottom: 2rem;
-    background-color: #f2f2f2;
+    background-color: var(--card-bg);
     -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     -webkit-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -104,18 +105,18 @@ const services = [
     width: 48px;
     margin-bottom: 1rem;
     height: 48px;
-    color: #111;
+    color: var(--text-main);
 }
 
 .service-title {
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
-    color: #333;
+    color: var(--text-main);
 }
 
 .service-description {
     font-size: 0.95rem;
-    color: #666;
+    color: var(--text-muted);
 }
 </style>

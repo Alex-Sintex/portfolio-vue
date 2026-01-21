@@ -2,7 +2,7 @@
     <div class="hero">
         <div class="overlay">
             <div class="intro">
-                <button class="scroll-indicator" @click="scrollToNext">
+                <button class="scroll-indicator" @click="scrollToNext" aria-label="Scroll to next section">
                     <span class="arrow"></span>
                 </button>
                 <h1 class="text-uppercase">Kevin Alexis</h1>
@@ -29,9 +29,15 @@ let isDeleting = false
 
 function scrollToNext() {
     const nextSection = document.querySelector('#about')
-    if (nextSection) {
-        nextSection.scrollIntoView({ behavior: 'smooth' })
-    }
+    if (!nextSection) return
+
+    const y =
+        nextSection.getBoundingClientRect().top + window.pageYOffset
+
+    window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+    })
 }
 
 function typeEffect() {
@@ -73,13 +79,13 @@ onMounted(() => {
     height: 100vh;
     background: url('@/assets/images/backgrounds/kali.jpg') center/cover no-repeat;
     position: relative;
-    color: white;
+    color: var(--hero-text);
     font-family: 'Helvetica Neue', sans-serif;
 }
 
 .text-uppercase {
     font-weight: 800;
-    color: rgb(255, 255, 255);
+    color: var(--hero-text);
     font-size: 60px;
     line-height: 100px;
     letter-spacing: 2px;
@@ -87,7 +93,7 @@ onMounted(() => {
 }
 
 .overlay {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--hero-overlay);
     height: 100%;
     width: 100%;
     display: flex;
@@ -97,6 +103,7 @@ onMounted(() => {
 
 .intro {
     text-align: center;
+    padding-bottom: 100px;
 }
 
 .intro h2 {
@@ -109,11 +116,56 @@ onMounted(() => {
 ========================= */
 .scroll-indicator {
     position: absolute;
-    bottom: 150px;
-    background: none;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
     border: none;
     cursor: pointer;
-    padding: 0;
+    z-index: 10;
+    touch-action: manipulation;
+}
+
+@media (max-width: 768px) {
+    .scroll-indicator {
+        bottom: 60px;
+        width: 72px;
+        height: 72px;
+    }
+
+    .arrow {
+        width: 26px;
+        height: 26px;
+        border-width: 3px;
+    }
+}
+
+@media (max-height: 500px) {
+    .intro {
+        padding-bottom: 40px;
+    }
+
+    .text-uppercase {
+        font-size: 42px;
+        line-height: 56px;
+    }
+
+    .typewriter {
+        font-size: 24px;
+    }
+
+    .typewriter::after {
+        height: 24px;
+    }
+}
+
+.scroll-indicator:active {
+    transform: translateX(-50%) scale(0.9);
 }
 
 /* ARROW SHAPE */
@@ -121,8 +173,8 @@ onMounted(() => {
     display: block;
     width: 22px;
     height: 22px;
-    border-left: 2px solid #fff;
-    border-bottom: 2px solid #fff;
+    border-left: 2px solid var(--hero-arrow);
+    border-bottom: 2px solid var(--hero-arrow);
     transform: rotate(-45deg);
     animation: fadeArrow 1.8s infinite ease-in-out;
 }
@@ -149,7 +201,7 @@ onMounted(() => {
 .typewriter {
     display: inline-block;
     position: relative;
-    color: rgb(255, 255, 255);
+    color: var(--hero-text-muted);
     font-size: 32px;
     font-weight: 500;
 }
@@ -159,7 +211,7 @@ onMounted(() => {
     display: inline-block;
     width: 2px;
     height: 32px;
-    background-color: white;
+    background-color: var(--hero-cursor);
     margin-left: 4px;
     vertical-align: bottom;
     opacity: 1;

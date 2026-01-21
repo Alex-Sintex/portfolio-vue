@@ -2,69 +2,72 @@
     <section id="updates" class="updates-section">
         <h2 class="section-title">UPDATES</h2>
 
-        <div class="updates-grid">
-            <article v-for="update in updates" :key="update.title" class="update-card">
+        <transition-group name="updates" tag="div" class="updates-grid">
+            <!-- REAL CARDS -->
+            <article v-for="update in visibleUpdates" :key="update.id" class="update-card">
                 <div class="image-wrapper">
                     <img :src="update.image" :alt="update.title" />
                 </div>
 
                 <h3 class="update-title">{{ update.title }}</h3>
-
-                <p class="update-description">
-                    {{ update.description }}
-                </p>
-
+                <p class="update-description">{{ update.description }}</p>
                 <p class="update-meta">
-                    <strong>Status:</strong> {{ update.status }} ·
-                    <span>{{ update.tech }}</span>
+                    <strong>Status:</strong> {{ update.status }} · {{ update.tech }}
                 </p>
             </article>
-        </div>
 
-        <button class="view-more">VIEW MORE</button>
+            <!-- SKELETON -->
+            <article v-if="loading" v-for="n in 3" :key="'skeleton-' + n" class="update-card skeleton">
+                <div class="skeleton-img"></div>
+                <div class="skeleton-line"></div>
+                <div class="skeleton-line short"></div>
+            </article>
+        </transition-group>
+
+        <button v-if="hasMoreThanThree" class="view-more" @click="toggleUpdates" :disabled="loading">
+            {{ loading ? 'Loading…' : expanded ? 'SHOW LESS' : 'VIEW MORE' }}
+        </button>
     </section>
 </template>
 
 <script setup>
+import { ref, computed } from 'vue'
+
 import portfolio_web from '@/assets/images/portfolio/web/portfolio_web.png'
-import band_web from '@/assets/images/portfolio/web/band_web.png'
 import mootec from '@/assets/images/portfolio/web/mootec.png'
 
-const updates = [
-    {
-        title: 'Personal Portfolio (Vue 3)',
-        image: portfolio_web,
-        description:
-            'Building my personal portfolio using Vue 3. Currently focused on animations, loaders, transitions, and UI polish.',
-        status: 'In Progress',
-        tech: 'Vue 3, HTML5, CSS Animations, JS'
-    },
-    {
-        title: 'Band web app',
-        image: band_web,
-        description:
-            'Developed a band ecommerce web application to launch latest music events and tickets.',
-        status: 'Completed',
-        tech: 'Vue 3, HTML5, CSS, JS'
-    },
-    {
-        title: 'Cybersecurity Fundamentals',
-        image: mootec,
-        description:
-            'Studying cybersecurity concepts such as threats, vulnerabilities, and defensive practices to strengthen my foundation.',
-        status: 'Completed',
-        tech: 'Cybersecurity Basics'
-    }
+const allUpdates = [
+    { id: 1, title: 'Personal Portfolio (Vue 3)', image: portfolio_web, description: 'Building my personal portfolio using Vue 3.', status: 'In Progress', tech: 'Vue 3, HTML5, CSS' },
+    { id: 2, title: 'Cybersecurity Fundamentals', image: mootec, description: 'Studying cybersecurity concepts.', status: 'Completed', tech: 'Cybersecurity Basics' },
 ]
+
+const visibleCount = ref(3)
+const loading = ref(false)
+const expanded = ref(false)
+
+const visibleUpdates = computed(() => allUpdates.slice(0, visibleCount.value))
+const hasMoreThanThree = computed(() => allUpdates.length > 3)
+
+function toggleUpdates() {
+    loading.value = true
+
+    setTimeout(() => {
+        if (!expanded.value) {
+            visibleCount.value = allUpdates.length
+            expanded.value = true
+        } else {
+            visibleCount.value = 3
+            expanded.value = false
+        }
+        loading.value = false
+    }, 800)
+}
 </script>
 
 <style scoped>
-/* =========================
-   SECTION
-========================= */
 .updates-section {
     padding: 4rem 2rem;
-    background-color: #f9f9f9;
+    background: var(--bg-main);
     text-align: center;
     padding-top: 120px;
     padding-bottom: 160px;
@@ -72,41 +75,75 @@ const updates = [
 
 .section-title {
     font-size: 2.5rem;
-    margin-bottom: 2rem;
-    color: #222;
+    margin-bottom: 2.5rem;
+    color: var(--text-main);
 }
 
-/* =========================
-   GRID
-========================= */
 .updates-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2.5rem;
     max-width: 1200px;
     margin: 0 auto 3rem;
+    position: relative;
 }
 
-/* =========================
-   CARD
-========================= */
 .update-card {
-    background: #fff;
+    background: var(--card-bg);
     text-align: left;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .08);
+    transition: transform .3s ease, box-shadow .3s ease;
+    overflow: hidden;
 }
 
 .update-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, .12);
 }
 
-/* =========================
+/* ------------------------
+   TRANSITION
+------------------------ */
+.updates-enter-from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+    max-height: 0;
+}
+
+.updates-enter-to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    max-height: 500px;
+}
+
+.updates-enter-active {
+    transition: all 0.45s ease;
+}
+
+.updates-leave-from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    max-height: 500px;
+}
+
+.updates-leave-to {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+    max-height: 0;
+}
+
+.updates-leave-active {
+    transition: all 0.35s ease;
+}
+
+.updates-move {
+    transition: transform 0.35s ease;
+}
+
+/* ------------------------
    IMAGE
-========================= */
+------------------------ */
 .image-wrapper {
-    width: 100%;
     height: 200px;
     overflow: hidden;
 }
@@ -117,44 +154,81 @@ const updates = [
     object-fit: cover;
 }
 
-/* =========================
+/* ------------------------
    TEXT
-========================= */
+------------------------ */
 .update-title {
     font-size: 1.2rem;
     font-weight: 600;
-    margin: 1.2rem 1.5rem 0.5rem;
-    color: #111;
+    margin: 1.2rem 1.5rem .5rem;
 }
 
 .update-description {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: #555;
+    font-size: .95rem;
+    color: var(--text-muted);
     margin: 0 1.5rem 1rem;
 }
 
 .update-meta {
-    font-size: 0.85rem;
-    color: #777;
+    font-size: .85rem;
+    color: var(--text-muted);
     margin: 0 1.5rem 1.5rem;
 }
 
-/* =========================
+/* ------------------------
    BUTTON
-========================= */
+------------------------ */
 .view-more {
-    padding: 0.75rem 2.2rem;
+    padding: .75rem 2.2rem;
+    border: 1px solid var(--text-main);
+    color: var(--text-main);
     background: transparent;
-    border: 1px solid #222;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: .3s;
 }
 
-.view-more:hover {
-    background: #222;
-    color: #fff;
+.view-more:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.view-more:hover:not(:disabled) {
+    background: var(--text-main);
+    color: var(--bg-main);
+}
+
+/* ------------------------
+   SKELETON
+------------------------ */
+.skeleton {
+    pointer-events: none;
+}
+
+.skeleton-img {
+    height: 200px;
+    background: var(--border-color);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s infinite;
+}
+
+.skeleton-line {
+    height: 14px;
+    margin: 1.2rem 1.5rem .6rem;
+    background: var(--border-color);
+    animation: shimmer 1.4s infinite;
+}
+
+.skeleton-line.short {
+    width: 60%;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 100% 0
+    }
+
+    100% {
+        background-position: -100% 0
+    }
 }
 </style>

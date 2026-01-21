@@ -82,8 +82,9 @@ function submitForm() {
 <style scoped>
 .contact-section {
     padding: 4rem 2rem;
-    background-color: #f9f9f9;
-    /* light neutral background */
+    padding-top: 80px;
+    background-color: var(--bg-main);
+    color: var(--text-main);
     text-align: center;
     font-family: 'Helvetica Neue', sans-serif;
 }
@@ -97,18 +98,18 @@ function submitForm() {
     font-size: 2.5rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
-    color: #222;
+    color: var(--text-main);
 }
 
 .contact-subtitle {
     font-size: 1.2rem;
-    color: #555;
+    color: var(--text-muted);
     margin-bottom: 1rem;
 }
 
 .contact-message {
     font-size: 1rem;
-    color: #666;
+    color: var(--text-muted);
     margin-bottom: 2rem;
 }
 
@@ -127,23 +128,27 @@ function submitForm() {
 }
 
 .contact-input {
+    background-color: var(--card-bg);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
     flex: 1;
     min-width: 240px;
     padding: 0.75rem 1rem;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
     font-size: 1rem;
     transition: border-color 0.3s ease;
 }
 
 .contact-input:focus {
-    border-color: #333;
+    border-color: var(--text-main);
     outline: none;
 }
 
 .contact-textarea {
     padding: 0.75rem 1rem;
-    border: 1px solid #ccc;
+    background-color: var(--card-bg);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
     border-radius: 0.5rem;
     font-size: 1rem;
     min-height: 120px;
@@ -151,10 +156,10 @@ function submitForm() {
 }
 
 .contact-button {
-    background-color: #fff;
-    color: black;
+    background-color: var(--card-bg);
+    color: var(--text-main);
+    border: 1px solid var(--text-main);
     padding: 0.75rem 1.25rem;
-    border: 1px solid #000;
     border-radius: 0.5rem;
     font-size: 1rem;
     font-weight: bold;
@@ -164,11 +169,16 @@ function submitForm() {
 
 .contact-button:hover {
     border: 1px solid #000;
-    background: #000;
-    color: #fff;
+    background: var(--text-main);
+    color: var(--bg-main);
     text-decoration: none;
     outline: none;
     cursor: pointer;
+}
+
+.contact-input::placeholder,
+.contact-textarea::placeholder {
+    color: var(--text-muted);
 }
 
 /* TOAST BASE */
@@ -177,6 +187,8 @@ function submitForm() {
     top: 1.5rem;
     right: 1.5rem;
     padding: 0.9rem 1.3rem;
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 0.75rem;
     font-size: 0.95rem;
     font-weight: 500;
@@ -187,12 +199,12 @@ function submitForm() {
 
 /* TYPES */
 .toast.success {
-    background: #0f172a;
+    background: var(--toast-success);
     color: #fff;
 }
 
 .toast.error {
-    background: #7f1d1d;
+    background: var(--toast-error);
     color: #fff;
 }
 

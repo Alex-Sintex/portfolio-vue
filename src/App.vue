@@ -19,7 +19,7 @@
     </div>
   </transition>
 
-  <!-- SITE CONTENT (UNCHANGED) -->
+  <!-- SITE CONTENT -->
   <div class="site">
     <Navbar />
 
@@ -57,6 +57,7 @@
       <Contact />
     </section>
 
+    <!-- FOOTER -->
     <Footer />
   </div>
 </template>
@@ -74,6 +75,18 @@ import WaveTop from './components/WaveTop.vue'
 import WaveBottom from './components/WaveBottom.vue'
 import { ref, onMounted } from 'vue'
 import { reactive, provide } from 'vue'
+
+// Dark mode switching
+const theme = ref(localStorage.getItem('theme') || 'light')
+
+function setTheme(mode) {
+  theme.value = mode
+  document.body.classList.toggle('dark', mode === 'dark')
+  localStorage.setItem('theme', mode)
+}
+
+provide('theme', theme)
+provide('setTheme', setTheme)
 
 // TOAST STATE
 const toast = reactive({
@@ -98,6 +111,8 @@ provide('showToast', showToast)
 const loading = ref(true)
 
 onMounted(() => {
+  // Set theme
+  setTheme(theme.value)
   // 1) Let loader show first
   setTimeout(() => {
     document.body.classList.add('curtain-open')
@@ -126,6 +141,91 @@ onMounted(() => {
 </script>
 
 <style>
+/* =========================
+   THEME VARIABLES
+========================= */
+:root {
+  /* HERO */
+  --hero-text: #ffffff;
+  --hero-text-muted: #e5e7eb;
+  --hero-cursor: #ffffff;
+  --hero-arrow: #ffffff;
+  --hero-overlay: rgba(0, 0, 0, 0.25);
+
+  /* COLORS */
+  --bg-main: #f9f9f9;
+  --bg-section: #ffffff;
+  --bg-navbar: transparent;
+  --bg-navbar-scrolled: #111111;
+
+  --text-main: #1f1f1f;
+  --orbit-badge-bg: #1f1f1f;
+  --orbit-text: #ffffff;
+  --text-muted: #555;
+  --text-inverse: #ffffff;
+
+  --card-bg: #ffffff;
+  --border-color: #e5e5e5;
+
+  /* Toasts */
+  --toast-success: #064e3b;
+  /* deep emerald */
+  --toast-error: #7c2d12;
+  /* warm dark amber/red */
+
+  --wave-main: #e5e5e5;
+  /* section background */
+  --wave-shadow: rgba(253, 249, 249, 0.04);
+  /* next section bg */
+  --wave-footer: #f9f9f9;
+  --wave-bg: #e5e5e5;
+  --wave-footer-bg: #e5e5e5;
+}
+
+/* DARK MODE */
+body.dark {
+  /* HERO */
+  --hero-text: #f9fafb;
+  --hero-text-muted: #d1d5db;
+  --hero-cursor: #f9fafb;
+  --hero-arrow: #f9fafb;
+  --hero-overlay: rgba(0, 0, 0, 0.45);
+
+  /* COLORS */
+  --bg-main: #121212;
+  --bg-section: #1a1a1a;
+  --bg-navbar: transparent;
+  --bg-navbar-scrolled: #121212;
+
+  --text-main: #eaeaea;
+  --orbit-badge-bg: #eaeaea;
+  --orbit-text: #1f1f1f;
+  --text-muted: #aaaaaa;
+  --text-inverse: #ffffff;
+
+  --card-bg: #1f1f1f;
+  --tool-icon-bg: #fdfbfb;
+  --border-color: #333;
+
+  /* Toasts */
+  --toast-success: #10b981;
+  /* soft emerald */
+  --toast-error: #f87171;
+  /* muted red */
+
+  --wave-main: #1f1f1f;
+  /* section background */
+  --wave-shadow: rgba(253, 249, 249, 0.04);
+  /* next section bg */
+  --wave-footer: #121212;
+  --wave-bg: #1f1f1f;
+}
+
+body {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
 /* =========================
    LOADER BASE
 ========================= */
@@ -270,8 +370,8 @@ body {
   top: 6rem;
   right: 1.5rem;
   z-index: 999999;
-  background: #111;
-  color: white;
+  background: var(--card-bg);
+  color: var(--text-main);
   padding: 15px 20px;
   border-radius: 3px;
   font-size: 1rem;

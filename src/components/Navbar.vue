@@ -34,6 +34,26 @@
                     <li><a href="#services" @click="toggleMobileMenu">Services</a></li>
                     <li><a href="#updates" @click="toggleMobileMenu">Updates</a></li>
                     <li><a href="#contact" @click="toggleMobileMenu">Contact</a></li>
+                    <!-- MOBILE THEME TOGGLE -->
+                    <li class="mobile-theme-toggle">
+                        <button @click="toggleTheme">
+                            <img v-if="theme === 'light'" src="@/assets/icons/moon_icon.png" alt="Dark mode" />
+                            <img v-else src="@/assets/icons/sun_icon.png" alt="Light mode" />
+                            <span>{{ theme === 'light' ? 'Dark mode' : 'Light mode' }}</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Mobile nav -->
+            <nav v-if="isMobileMenuOpen" class="nav-mobile">
+                <ul class="nav-list-mobile">
+                    <li><a href="#home" @click="toggleMobileMenu">Home</a></li>
+                    <li><a href="#about" @click="toggleMobileMenu">About me</a></li>
+                    <li><a href="#portfolio" @click="toggleMobileMenu">Portfolio</a></li>
+                    <li><a href="#services" @click="toggleMobileMenu">Services</a></li>
+                    <li><a href="#updates" @click="toggleMobileMenu">Updates</a></li>
+                    <li><a href="#contact" @click="toggleMobileMenu">Contact</a></li>
                 </ul>
             </nav>
         </div>
@@ -41,17 +61,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, inject } from 'vue'
 
-const theme = ref('light')
+const theme = inject('theme')
+const setTheme = inject('setTheme')
 const activeSection = ref('home')
 const scrolled = ref(false)
 const isMobileMenuOpen = ref(false)
 
 function toggleTheme() {
-    theme.value = theme.value === 'light' ? 'dark' : 'light'
-    document.documentElement.setAttribute('data-theme', theme.value)
-    localStorage.setItem('theme', theme.value)
+    const newTheme = theme.value === 'light' ? 'dark' : 'light'
+    setTheme(newTheme)
+    isMobileMenuOpen.value = false
 }
 
 function toggleMobileMenu() {
@@ -87,7 +108,6 @@ onMounted(() => {
 
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     theme.value = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light')
-    document.documentElement.setAttribute('data-theme', theme.value)
 })
 
 onUnmounted(() => {
@@ -115,7 +135,7 @@ onUnmounted(() => {
 .navbar.scrolled {
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: #111;
+    background-color: var(--bg-navbar-scrolled);
     box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 70px;
     transition: 0.5s;
 }
@@ -131,7 +151,7 @@ onUnmounted(() => {
 .logo {
     font-family: 'MyCustomFont', cursive;
     font-size: 1.5rem;
-    color: white;
+    color: var(--text-inverse);
 }
 
 .nav-list {
@@ -163,7 +183,7 @@ onUnmounted(() => {
     left: 0;
     width: 0%;
     height: 2px;
-    background-color: white;
+    background-color: var(--text-inverse);
     transition: width 0.3s ease;
 }
 
@@ -172,11 +192,11 @@ onUnmounted(() => {
 }
 
 .nav-link.active {
-    color: white;
+    color: var(--text-inverse);
 }
 
 .nav-link.inactive {
-    color: grey;
+    color: var(--text-muted);
 }
 
 .hamburger {
@@ -191,7 +211,7 @@ onUnmounted(() => {
 .hamburger span {
     width: 25px;
     height: 3px;
-    background-color: white;
+    background-color: var(--text-inverse);
     border-radius: 2px;
 }
 
@@ -217,7 +237,7 @@ onUnmounted(() => {
     top: 100%;
     left: 0;
     width: 100%;
-    background-color: #111;
+    background-color: var(--bg-navbar-scrolled);
     padding: 1rem 0;
     z-index: 99;
 }
@@ -302,5 +322,25 @@ onUnmounted(() => {
     .nav-mobile {
         display: none;
     }
+}
+
+.mobile-theme-toggle {
+    margin-top: 1rem;
+}
+
+.mobile-theme-toggle button {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.mobile-theme-toggle img {
+    width: 20px;
+    height: 20px;
 }
 </style>

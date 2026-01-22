@@ -1,6 +1,6 @@
 <template>
     <div class="about-wrapper">
-        <h2 class="section-title">ABOUT ME</h2>
+        <h2 class="section-title">{{ t('about.title') }}</h2>
         <div class="about-content">
             <div class="left-column">
                 <div class="badge-wrapper">
@@ -12,7 +12,7 @@
                             </defs>
                             <text class="orbit-text">
                                 <textPath href="#circlePath">
-                                    FULL STACK WEB DEVELOPER • FULL STACK WEB DEVELOPER
+                                    {{ t('about.orbit') }}
                                 </textPath>
                             </text>
                         </svg>
@@ -24,33 +24,31 @@
 
             <div class="right-column">
                 <p class="bio">
-                    I'm Kevin Alexis. I am a software engineer, and I'm very passionate and dedicated to programming
-                    tech solutions.
-                    With over two years of experience as a full stack developer, I've partipated with leading
-                    organizations
-                    to help drive their success and growth.
+                    {{ t('about.bio') }}
                 </p>
 
                 <div class="info-boxes">
                     <div class="info-box">
                         <img class="img" src="@/assets/icons/code-icon.png" alt="code">
-                        <h3>Languages</h3>
-                        <p>PHP, HTML, CSS, JavaScript<br />Vue.js, Laravel, SwiftUI, Shell</p>
+                        <h3>{{ t('about.info.languages.title') }}</h3>
+                        <p v-html="t('about.info.languages.value').replace(/\n/g, '<br />')"></p>
                     </div>
+
                     <div class="info-box">
                         <img class="img" src="@/assets/icons/edu-icon.png" alt="edu">
-                        <h3>Education</h3>
-                        <p>Computer Systems Engineering</p>
+                        <h3>{{ t('about.info.education.title') }}</h3>
+                        <p>{{ t('about.info.education.value') }}</p>
                     </div>
+
                     <div class="info-box">
                         <img class="img" src="@/assets/icons/project-icon.png" alt="project">
-                        <h3>Projects</h3>
-                        <p>Built more than 3 projects</p>
+                        <h3>{{ t('about.info.projects.title') }}</h3>
+                        <p>{{ t('about.info.projects.value') }}</p>
                     </div>
                 </div>
 
                 <div class="tools-section">
-                    <h3>Tools I Use</h3>
+                    <h3>{{ t('about.tools.title') }}</h3>
                     <div class="tools">
                         <div class="tool-icon"><img src="@/assets/icons/vscode.png" alt="VS Code" /></div>
                         <div class="tool-icon"><img src="@/assets/icons/vue.png" alt="Vue" /></div>
@@ -67,7 +65,9 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 </script>
 
 <style scoped>

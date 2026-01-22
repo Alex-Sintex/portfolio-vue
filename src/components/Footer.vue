@@ -12,12 +12,14 @@
 
         <!-- FOOTER CONTENT -->
         <div class="footer-content">
-            <p>© 2026 Kevin. All rights reserved.</p>
+            <p>{{ $t('footer.copyright') }}</p>
         </div>
     </footer>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const waveFooter = 'var(--wave-footer)'
 function scrollToTop() {
     window.scrollTo({

@@ -1,7 +1,7 @@
 <template>
     <section id="services" class="services-section">
-        <h1 class="section-title">SERVICES</h1>
-        <p class="subtitle">WHAT I DO</p>
+        <h1 class="section-title">{{ t('services.title') }}</h1>
+        <p class="subtitle">{{ t('services.subtitle') }}</p>
 
         <div class="services-grid">
             <div v-for="service in services" :key="service.title" class="service-card">
@@ -15,44 +15,44 @@
 </template>
 
 <script setup>
-const services = [
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
+/* 🔹 Services translated */
+const services = computed(() => [
     {
-        title: 'Web Design',
+        title: t('services.items.webDesign.title'),
         icon: ['fas', 'code'],
-        description:
-            'Creating visually engaging and user-friendly interfaces for websites and apps.'
+        description: t('services.items.webDesign.description')
     },
     {
-        title: 'Development',
+        title: t('services.items.development.title'),
         icon: ['fas', 'cube'],
-        description:
-            'Building scalable and maintainable web and mobile applications.'
+        description: t('services.items.development.description')
     },
     {
-        title: 'Graphics Design',
+        title: t('services.items.graphics.title'),
         icon: ['fas', 'camera'],
-        description:
-            'Designing logos, banners, and visual assets for digital platforms.'
+        description: t('services.items.graphics.description')
     },
     {
-        title: 'Responsive Design',
+        title: t('services.items.responsive.title'),
         icon: ['fas', 'mobile-screen'],
-        description:
-            'Ensuring seamless experiences across all screen sizes and devices.'
+        description: t('services.items.responsive.description')
     },
     {
-        title: 'SEO Friendly',
+        title: t('services.items.seo.title'),
         icon: ['fas', 'thumbs-up'],
-        description:
-            'Optimizing websites for search engines to improve visibility and ranking.'
+        description: t('services.items.seo.description')
     },
     {
-        title: 'Support',
+        title: t('services.items.support.title'),
         icon: ['fas', 'life-ring'],
-        description:
-            'Providing ongoing assistance and updates for deployed projects.'
+        description: t('services.items.support.description')
     }
-]
+])
 </script>
 
 <style scoped>

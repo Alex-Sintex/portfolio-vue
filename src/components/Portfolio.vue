@@ -1,10 +1,9 @@
 <template>
     <section id="portfolio" class="portfolio-section">
         <div class="portfolio-header">
-            <h2 class="section-title">PORTFOLIO</h2>
+            <h2 class="section-title">{{ t('portfolio.title') }}</h2>
             <p class="section-subtitle">
-                Welcome to my web and mobile development portfolio! Explore a collection
-                of projects showcasing my expertise in front-end and backend development.
+                {{ t('portfolio.subtitle') }}
             </p>
         </div>
 
@@ -46,33 +45,67 @@
 
 <script setup>
 import { ref, computed, watch, defineAsyncComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-// Web apps
+// Images
 import dontacoLogin from '@/assets/images/portfolio/web/dontaco.png'
 import academic_system from '@/assets/images/portfolio/web/academic_system.png'
 import band_web from '@/assets/images/portfolio/web/band_web.png'
-// Mobile apps
 import iautism from '@/assets/images/portfolio/mobile/iautism.png'
 import itracker from '@/assets/images/portfolio/mobile/itracker.png'
+
+const { t } = useI18n()
 
 const VueEasyLightbox = defineAsyncComponent(() =>
     import('vue-easy-lightbox')
 )
 
-const categories = ['Web Apps', 'Mobile Apps']
-const selectedCategory = ref('Web Apps')
+/* 🔹 Categories (translated) */
+const categories = computed(() => [
+    t('portfolio.categories.web'),
+    t('portfolio.categories.mobile')
+])
 
-const projects = [
-    { title: 'Accounting System', category: 'Web Apps', image: dontacoLogin },
-    { title: 'Academic System Administration', category: 'Web Apps', image: academic_system },
-    { title: 'Band ecommerce web application', category: 'Web Apps', image: band_web },
-    { title: 'IAutism App – Therapeutic support for children with Autism Spectrum Disorder', category: 'Mobile Apps', image: iautism },
-    { title: 'iTracker App – Money saver', category: 'Mobile Apps', image: itracker }
-]
+const selectedCategory = ref(categories.value[0])
 
-const filteredProjects = computed(() =>
-    projects.filter(p => p.category === selectedCategory.value)
-)
+/* 🔹 Projects (titles translated, category is KEY) */
+const projects = computed(() => [
+    {
+        title: t('portfolio.projects.accounting'),
+        category: 'web',
+        image: dontacoLogin
+    },
+    {
+        title: t('portfolio.projects.academic'),
+        category: 'web',
+        image: academic_system
+    },
+    {
+        title: t('portfolio.projects.band'),
+        category: 'web',
+        image: band_web
+    },
+    {
+        title: t('portfolio.projects.iautism'),
+        category: 'mobile',
+        image: iautism
+    },
+    {
+        title: t('portfolio.projects.itracker'),
+        category: 'mobile',
+        image: itracker
+    }
+])
+
+/* 🔹 Filter */
+const filteredProjects = computed(() => {
+    const key =
+        selectedCategory.value === t('portfolio.categories.web')
+            ? 'web'
+            : 'mobile'
+
+    return projects.value.filter(p => p.category === key)
+})
 
 const currentIndex = ref(0)
 const visible = ref(false)

@@ -13,35 +13,30 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-const texts = [
-    'Mobile developer (iOS).',
-    'Web Developer.',
-    'Freelancer.',
-    'Programmer.'
-]
+const { tm, locale } = useI18n()
+
+// 🔹 reactive translated texts
+const texts = computed(() => tm('hero.roles'))
 
 const typedText = ref('')
 let textIndex = 0
 let charIndex = 0
 let isDeleting = false
+let timerId = null
 
-function scrollToNext() {
-    const nextSection = document.querySelector('#about')
-    if (!nextSection) return
-
-    window.scrollTo({
-        top: nextSection.offsetTop,
-        behavior: 'smooth'
-    })
+function resetTypewriter() {
+    typedText.value = ''
+    textIndex = 0
+    charIndex = 0
+    isDeleting = false
 }
 
-/* =========================
-   TYPE EFFECT
-========================= */
 function typeEffect() {
-    const currentText = texts[textIndex]
+    const currentText = texts.value[textIndex]
+    if (!currentText) return
 
     if (!isDeleting) {
         typedText.value = currentText.substring(0, charIndex + 1)
@@ -56,44 +51,29 @@ function typeEffect() {
 
         if (charIndex === 0) {
             isDeleting = false
-            textIndex = (textIndex + 1) % texts.length
+            textIndex = (textIndex + 1) % texts.value.length
         }
     }
 
-    setTimeout(typeEffect, isDeleting ? 50 : 100)
+    timerId = setTimeout(typeEffect, isDeleting ? 50 : 100)
 }
 
-/* =========================
-   HERO SCROLL EFFECT
-========================= */
-function handleScroll() {
-    // ❌ Disable on mobile & tablets
-    if (window.innerWidth <= 768) return
-
-    const hero = document.querySelector('.hero')
-    if (!hero) return
-
-    const scrollY = window.scrollY
-    const maxScroll = window.innerHeight
-
-    const progress = Math.min(scrollY / maxScroll, 1)
-
-    const scale = 120 - progress * 20
-    const posY = 50 + progress * 10
-
-    hero.style.backgroundSize = `${scale}%`
-    hero.style.backgroundPosition = `center ${posY}%`
-}
+// 🔹 restart animation when language changes
+watch(locale, () => {
+    clearTimeout(timerId)
+    resetTypewriter()
+    typeEffect()
+})
 
 onMounted(() => {
     typeEffect()
-    window.addEventListener('scroll', handleScroll)
 })
 
 onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll)
+    clearTimeout(timerId)
 })
 </script>
+
 
 <style scoped>
 .hero {

@@ -11,17 +11,29 @@
             <!-- Desktop nav -->
             <nav class="nav-desktop">
                 <ul class="nav-list">
-                    <li><a href="#home" :class="linkClass('home')">Home</a></li>
-                    <li><a href="#about" :class="linkClass('about')">About me</a></li>
-                    <li><a href="#portfolio" :class="linkClass('portfolio')">Portfolio</a></li>
-                    <li><a href="#services" :class="linkClass('services')">Services</a></li>
-                    <li><a href="#updates" :class="linkClass('updates')">Updates</a></li>
-                    <li><a href="#contact" :class="linkClass('contact')">Contact</a></li>
+                    <li><a href="#home" :class="linkClass('home')">{{ $t('nav.home') }}</a></li>
+                    <li><a href="#about" :class="linkClass('about')">{{ $t('nav.about') }}</a></li>
+                    <li><a href="#portfolio" :class="linkClass('portfolio')">{{ $t('nav.portfolio') }}</a></li>
+                    <li><a href="#services" :class="linkClass('services')">{{ $t('nav.services') }}</a></li>
+                    <li><a href="#updates" :class="linkClass('updates')">{{ $t('nav.updates') }}</a></li>
+                    <li><a href="#contact" :class="linkClass('contact')">{{ $t('nav.contact') }}</a></li>
                     <!-- Theme toggle button -->
                     <button class="theme-toggle" @click="toggleTheme">
                         <img v-if="theme === 'light'" src="@/assets/icons/moon_icon.png" alt="Dark mode" class="w-5" />
                         <img v-else src="@/assets/icons/sun_icon.png" alt="Light mode" class="w-5" />
                     </button>
+                    <!-- Language switch -->
+                    <li class="lang-dropdown">
+                        <button class="lang-trigger" @click.stop="toggleLang">
+                            {{ locale.toUpperCase() }}
+                            <span class="caret">▾</span>
+                        </button>
+
+                        <ul v-if="langOpen" class="lang-menu">
+                            <li @click="changeLang('en')">English</li>
+                            <li @click="changeLang('es')">Español</li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
 
@@ -42,18 +54,17 @@
                             <span>{{ theme === 'light' ? 'Dark mode' : 'Light mode' }}</span>
                         </button>
                     </li>
-                </ul>
-            </nav>
+                    <!-- MOBILE LANGUAGE SWITCH -->
+                    <li class="mobile-lang-toggle">
+                        <button @click="toggleLang">
+                            🌐 {{ locale.toUpperCase() }}
+                        </button>
 
-            <!-- Mobile nav -->
-            <nav v-if="isMobileMenuOpen" class="nav-mobile">
-                <ul class="nav-list-mobile">
-                    <li><a href="#home" @click="toggleMobileMenu">Home</a></li>
-                    <li><a href="#about" @click="toggleMobileMenu">About me</a></li>
-                    <li><a href="#portfolio" @click="toggleMobileMenu">Portfolio</a></li>
-                    <li><a href="#services" @click="toggleMobileMenu">Services</a></li>
-                    <li><a href="#updates" @click="toggleMobileMenu">Updates</a></li>
-                    <li><a href="#contact" @click="toggleMobileMenu">Contact</a></li>
+                        <ul v-if="langOpen" class="mobile-lang-menu">
+                            <li @click="changeLang('en')">English</li>
+                            <li @click="changeLang('es')">Español</li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -62,12 +73,26 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, inject } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { locale } = useI18n()
+const langOpen = ref(false)
 const theme = inject('theme')
 const setTheme = inject('setTheme')
 const activeSection = ref('home')
 const scrolled = ref(false)
 const isMobileMenuOpen = ref(false)
+
+function toggleLang() {
+    langOpen.value = !langOpen.value
+}
+
+function changeLang(lang) {
+    locale.value = lang
+    localStorage.setItem('lang', lang)
+    langOpen.value = false
+    isMobileMenuOpen.value = false
+}
 
 function toggleTheme() {
     const newTheme = theme.value === 'light' ? 'dark' : 'light'
@@ -108,6 +133,10 @@ onMounted(() => {
 
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     theme.value = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light')
+
+    document.addEventListener('click', () => {
+        langOpen.value = false
+    })
 })
 
 onUnmounted(() => {
@@ -343,5 +372,88 @@ onUnmounted(() => {
 .mobile-theme-toggle img {
     width: 20px;
     height: 20px;
+}
+
+/* Language switcher styles */
+.lang-dropdown {
+    position: relative;
+    margin-left: 1rem;
+}
+
+.lang-trigger {
+    background: none;
+    border: 1px solid var(--text-muted);
+    color: var(--text-muted);
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.lang-trigger:hover {
+    border-color: var(--text-inverse);
+    color: var(--text-inverse);
+}
+
+.caret {
+    font-size: 0.6rem;
+}
+
+.lang-menu {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background: var(--bg-navbar-scrolled);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    list-style: none;
+    padding: 0.4rem 0;
+    min-width: 120px;
+    z-index: 200;
+}
+
+.lang-menu li {
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.lang-menu li:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-inverse);
+}
+
+.mobile-lang-toggle {
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.mobile-lang-toggle button {
+    background: none;
+    border: 1px solid white;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.mobile-lang-menu {
+    margin-top: 0.4rem;
+    list-style: none;
+    padding: 0;
+}
+
+.mobile-lang-menu li {
+    padding: 0.4rem;
+    cursor: pointer;
+    color: white;
+}
+
+.mobile-lang-menu li:hover {
+    background: rgba(255, 255, 255, 0.15);
 }
 </style>

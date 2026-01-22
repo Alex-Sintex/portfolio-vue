@@ -1,6 +1,6 @@
 <template>
     <section id="updates" class="updates-section">
-        <h2 class="section-title">UPDATES</h2>
+        <h2 class="section-title">{{ t('updates.title') }}</h2>
 
         <transition-group name="updates" tag="div" class="updates-grid">
             <!-- REAL CARDS -->
@@ -12,7 +12,8 @@
                 <h3 class="update-title">{{ update.title }}</h3>
                 <p class="update-description">{{ update.description }}</p>
                 <p class="update-meta">
-                    <strong>Status:</strong> {{ update.status }} · {{ update.tech }}
+                    <strong>{{ t('updates.statusLabel') }}:</strong>
+                    {{ update.status }} · {{ update.tech }}
                 </p>
             </article>
 
@@ -25,35 +26,62 @@
         </transition-group>
 
         <button v-if="hasMoreThanThree" class="view-more" @click="toggleUpdates" :disabled="loading">
-            {{ loading ? 'Loading…' : expanded ? 'SHOW LESS' : 'VIEW MORE' }}
+            {{
+                loading
+                    ? t('updates.loading')
+                    : expanded
+                        ? t('updates.showLess')
+                        : t('updates.viewMore')
+            }}
         </button>
     </section>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import portfolio_web from '@/assets/images/portfolio/web/portfolio_web.png'
 import mootec from '@/assets/images/portfolio/web/mootec.png'
 
-const allUpdates = [
-    { id: 1, title: 'Personal Portfolio (Vue 3)', image: portfolio_web, description: 'Building my personal portfolio using Vue 3.', status: 'In Progress', tech: 'Vue 3, HTML5, CSS' },
-    { id: 2, title: 'Cybersecurity Fundamentals', image: mootec, description: 'Studying cybersecurity concepts.', status: 'Completed', tech: 'Cybersecurity Basics' },
-]
+const { t } = useI18n()
+
+/* 🔹 Translated updates */
+const allUpdates = computed(() => [
+    {
+        id: 1,
+        title: t('updates.items.portfolio.title'),
+        image: portfolio_web,
+        description: t('updates.items.portfolio.description'),
+        status: t('updates.status.inProgress'),
+        tech: 'Vue 3, HTML5, CSS'
+    },
+    {
+        id: 2,
+        title: t('updates.items.cyber.title'),
+        image: mootec,
+        description: t('updates.items.cyber.description'),
+        status: t('updates.status.completed'),
+        tech: 'Cybersecurity Basics'
+    }
+])
 
 const visibleCount = ref(3)
 const loading = ref(false)
 const expanded = ref(false)
 
-const visibleUpdates = computed(() => allUpdates.slice(0, visibleCount.value))
-const hasMoreThanThree = computed(() => allUpdates.length > 3)
+const visibleUpdates = computed(() =>
+    allUpdates.value.slice(0, visibleCount.value)
+)
+
+const hasMoreThanThree = computed(() => allUpdates.value.length > 3)
 
 function toggleUpdates() {
     loading.value = true
 
     setTimeout(() => {
         if (!expanded.value) {
-            visibleCount.value = allUpdates.length
+            visibleCount.value = allUpdates.value.length
             expanded.value = true
         } else {
             visibleCount.value = 3

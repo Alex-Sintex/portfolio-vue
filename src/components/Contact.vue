@@ -1,25 +1,27 @@
 <template>
     <section id="contact" class="contact-section">
         <div class="contact-header">
-            <h2 class="contact-title">CONTACT</h2>
-            <p class="contact-subtitle">Get in touch</p>
+            <h2 class="contact-title">{{ $t('contact.title') }}</h2>
+            <p class="contact-subtitle">{{ $t('contact.subtitle') }}</p>
             <p class="contact-message">
-                I'd love to hear from you! If you have any questions, comments or feedback,
-                please use the form below.
+                {{ $t('contact.message') }}
             </p>
         </div>
 
         <form class="contact-form" @submit.prevent="submitForm">
             <div class="contact-row">
-                <input type="text" class="contact-input" placeholder="Enter your name" v-model="form.name" />
+                <input type="text" class="contact-input" :placeholder="$t('contact.form.name')" v-model="form.name"
+                    aria-label="Name" />
 
-                <input type="email" class="contact-input" placeholder="Enter your email" v-model="form.email" />
+                <input type="email" class="contact-input" :placeholder="$t('contact.form.email')" v-model="form.email"
+                    aria-label="Email" />
             </div>
 
-            <textarea class="contact-textarea" placeholder="Enter your message" v-model="form.message"></textarea>
+            <textarea class="contact-textarea" :placeholder="$t('contact.form.message')" v-model="form.message"
+                aria-label="Message"></textarea>
 
             <button class="contact-button" :disabled="loading">
-                {{ loading ? 'Sending…' : 'Submit now →' }}
+                {{ loading ? $t('contact.form.sending') : $t('contact.form.submit') }}
             </button>
         </form>
     </section>
@@ -41,26 +43,37 @@ const form = ref({
 
 const loading = ref(false)
 
-// SUBMIT
+// SIMPLE EMAIL CHECK
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 function submitForm() {
-    // 🔴 BASIC VALIDATION
+    if (loading.value) return
+
+    // BASIC VALIDATION
     if (!form.value.name || !form.value.email || !form.value.message) {
         showToast('error', 'Please fill in all fields')
         return
     }
 
+    if (!emailRegex.test(form.value.email)) {
+        showToast('error', 'Please enter a valid email')
+        return
+    }
+
     loading.value = true
+
+    const payload = {
+        from_name: form.value.name.trim(),
+        from_email: form.value.email.trim(),
+        message: form.value.message.trim()
+    }
 
     emailjs
         .send(
-            'service_e5yau1j',
-            'template_arzvq82',
-            {
-                from_name: form.value.name,
-                from_email: form.value.email,
-                message: form.value.message
-            },
-            'OFMawHrk_qoNzqw25'
+            import.meta.env.VITE_EMAILJS_SERVICE_ID,
+            import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+            payload,
+            import.meta.env.VITE_EMAILJS_PUBLIC_KEY
         )
         .then(() => {
             showToast('success', 'Message sent successfully ✔')
@@ -77,7 +90,6 @@ function submitForm() {
         })
 }
 </script>
-
 
 <style scoped>
 .contact-section {

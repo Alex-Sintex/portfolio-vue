@@ -1,15 +1,13 @@
 <template>
-  <!-- LOADER -->
-  <div v-show="loading" id="loader">
-    <!-- CENTER LOADING -->
+  <!-- PRELOADER -->
+  <div id="loader-wrapper">
     <div class="loader-center">
-      <img src="/favicons/favicon-32x32.png" alt="loading" class="navbar-logo" draggable="false" />
-      <div class="ring"></div>
+      <img src="/favicons/favicon-32x32.png" alt="Logo" class="loader-logo" />
+      <div class="loader-ring"></div>
     </div>
 
-    <!-- CURTAINS -->
-    <div class="curtain left"></div>
-    <div class="curtain right"></div>
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
   </div>
 
   <!-- GLOBAL TOAST -->
@@ -19,64 +17,62 @@
     </div>
   </transition>
 
-  <!-- SITE CONTENT -->
+  <!-- SITE -->
   <div class="site">
     <Navbar />
 
-    <section id="home" class="hero">
+    <section id="home" class="hero-section">
       <Hero />
-      <WaveBottom />
+      <Wave />
     </section>
 
-    <section id="about" class="about fade-in-section">
-      <WaveTop />
+    <section id="about" class="content-section primary">
       <About />
-      <WaveBottom />
+      <Wave />
     </section>
 
-    <section id="portfolio" class="portfolio fade-in-section">
-      <WaveTop />
+    <section id="portfolio" class="content-section secondary">
       <Portfolio />
-      <WaveBottom />
+      <Wave />
     </section>
 
-    <section id="services" class="services fade-in-section">
-      <WaveTop />
+    <section id="services" class="content-section primary">
       <Services />
-      <WaveBottom />
+      <Wave />
     </section>
 
-    <section id="updates" class="updates fade-in-section">
-      <WaveTop />
+    <section id="updates" class="content-section secondary">
       <Updates />
-      <WaveBottom />
+      <Wave />
     </section>
 
-    <section id="contact" class="contact fade-in-section">
-      <WaveTop />
+    <section id="contact" class="content-section primary">
       <Contact />
     </section>
 
-    <!-- FOOTER -->
     <Footer />
   </div>
 </template>
 
 <script setup>
+import { ref, reactive, provide, onMounted, onUnmounted } from 'vue'
+
+/* =====================
+   COMPONENTS
+===================== */
 import Navbar from './components/Navbar.vue'
 import Hero from './components/Hero.vue'
 import About from './components/About.vue'
-import Footer from './components/Footer.vue'
 import Portfolio from './components/Portfolio.vue'
 import Services from './components/Services.vue'
 import Updates from './components/Updates.vue'
 import Contact from './components/Contact.vue'
-import WaveTop from './components/WaveTop.vue'
-import WaveBottom from './components/WaveBottom.vue'
-import { ref, onMounted } from 'vue'
-import { reactive, provide } from 'vue'
+import Footer from './components/Footer.vue'
+import Wave from './components/Wave.vue'
 
-// Dark mode switching
+/* =====================
+   THEME
+===================== */
 const theme = ref(localStorage.getItem('theme') || 'light')
 
 function setTheme(mode) {
@@ -88,14 +84,15 @@ function setTheme(mode) {
 provide('theme', theme)
 provide('setTheme', setTheme)
 
-// TOAST STATE
+/* =====================
+   TOAST
+===================== */
 const toast = reactive({
   show: false,
-  type: 'success', // success | error
+  type: 'success',
   message: ''
 })
 
-// PROVIDE FUNCTION
 function showToast(type, message) {
   toast.type = type
   toast.message = message
@@ -108,35 +105,52 @@ function showToast(type, message) {
 
 provide('showToast', showToast)
 
-const loading = ref(true)
-
-onMounted(() => {
-  // Set theme
-  setTheme(theme.value)
-  // 1) Let loader show first
-  setTimeout(() => {
-    document.body.classList.add('curtain-open')
-  }, 1500)
-
-  // 2) Remove loader after curtain animation
-  setTimeout(() => {
-    loading.value = false
-    document.body.classList.remove('curtain-open')
-  }, 3800)
-
-  // Fade-in observer
+/* =====================
+   FADE-IN OBSERVER
+===================== */
+let observer = null
+function initFadeIn() {
   const faders = document.querySelectorAll('.fade-in-section')
-  const observer = new IntersectionObserver(
+
+  observer = new IntersectionObserver(
     entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible')
+          observer.unobserve(entry.target)
         }
       })
     },
     { threshold: 0.3 }
   )
-  faders.forEach(section => observer.observe(section))
+
+  faders.forEach(el => observer.observe(el))
+}
+
+/* =====================
+   PRELOADER
+===================== */
+function initPreloader() {
+  document.body.style.overflow = 'hidden'
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.body.classList.add('loaded')
+      document.body.style.overflow = ''
+    }, 1000)
+  })
+}
+
+/* =====================
+   MOUNT / UNMOUNT
+===================== */
+onMounted(() => {
+  setTheme(theme.value)
+  initPreloader()
+  initFadeIn()
+})
+
+onUnmounted(() => {
+  if (observer) observer.disconnect()
 })
 </script>
 
@@ -145,185 +159,141 @@ onMounted(() => {
    THEME VARIABLES
 ========================= */
 :root {
-  /* HERO */
   --hero-text: #ffffff;
   --hero-text-muted: #e5e7eb;
   --hero-cursor: #ffffff;
   --hero-arrow: #ffffff;
   --hero-overlay: rgba(0, 0, 0, 0.25);
 
-  /* COLORS */
+  --bg-primary: #ffffff;
+  --bg-secondary: #e5e5e5;
   --bg-main: #f9f9f9;
   --bg-section: #ffffff;
   --bg-navbar: transparent;
   --bg-navbar-scrolled: #111111;
 
   --text-main: #1f1f1f;
-  --orbit-badge-bg: #1f1f1f;
-  --orbit-text: #ffffff;
+  --tool-icon-bg: #ffffff;
   --text-muted: #555;
   --text-inverse: #ffffff;
 
   --card-bg: #ffffff;
   --border-color: #e5e5e5;
 
-  /* Toasts */
   --toast-success: #064e3b;
-  /* deep emerald */
-  --toast-error: #7c2d12;
-  /* warm dark amber/red */
+  --toast-error: #d73802;
 
+  --wave-shadow: #e5e5e5;
   --wave-main: #e5e5e5;
-  /* section background */
-  --wave-shadow: rgba(253, 249, 249, 0.04);
-  /* next section bg */
-  --wave-footer: #f9f9f9;
   --wave-bg: #e5e5e5;
   --wave-footer-bg: #e5e5e5;
+  --wave-footer: #ffffff;
+
+  --orbit-badge-bg: #111111;
+  --orbit-badge-text: #ffffff;
+
+  /* PRELOADER */
+  --loader-bg: #111111;
+  --loader-ring: #3c3c3c;
 }
 
-/* DARK MODE */
 body.dark {
-  /* HERO */
   --hero-text: #f9fafb;
   --hero-text-muted: #d1d5db;
   --hero-cursor: #f9fafb;
   --hero-arrow: #f9fafb;
   --hero-overlay: rgba(0, 0, 0, 0.45);
 
-  /* COLORS */
+  --bg-primary: #1f1f1f;
+  --bg-secondary: #333;
   --bg-main: #121212;
   --bg-section: #1a1a1a;
-  --bg-navbar: transparent;
-  --bg-navbar-scrolled: #121212;
+  --bg-navbar-scrolled: #1a1a1a;
 
   --text-main: #eaeaea;
-  --orbit-badge-bg: #eaeaea;
-  --orbit-text: #1f1f1f;
+  --tool-icon-bg: #f9fafb;
   --text-muted: #aaaaaa;
-  --text-inverse: #ffffff;
 
   --card-bg: #1f1f1f;
-  --tool-icon-bg: #fdfbfb;
   --border-color: #333;
 
-  /* Toasts */
   --toast-success: #10b981;
-  /* soft emerald */
   --toast-error: #f87171;
-  /* muted red */
 
+  --wave-shadow: #1f1f1f;
   --wave-main: #1f1f1f;
-  /* section background */
-  --wave-shadow: rgba(253, 249, 249, 0.04);
-  /* next section bg */
-  --wave-footer: #121212;
   --wave-bg: #1f1f1f;
+  --wave-footer: #1a1a1a;
+
+  --orbit-badge-bg: #ffffff;
+  --orbit-badge-text: #111111;
+
+  --loader-bg: #0b0b0b;
+  --loader-ring: #aaa;
+}
+
+/* =========================
+   BASE
+========================= */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  background: var(--bg-main, #f9f9f9);
+  color: var(--text-main, #1f1f1f);
 }
 
 body {
-  background: var(--bg-main);
-  color: var(--text-main);
+  overflow-x: hidden;
 }
 
 /* =========================
-   LOADER BASE
+   SECTION BASE
 ========================= */
-#loader {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  z-index: 9999;
+.content-section>* {
+  background: transparent !important;
+}
+
+.hero-section,
+.content-section {
+  position: relative;
   overflow: hidden;
 }
 
-/* =========================
-   LOADER CENTER (VISIBLE FIRST)
-========================= */
-.loader-center {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  z-index: 2;
+.hero-section {
+  height: 100vh;
 }
 
-.loader-center {
-  opacity: 1;
-  transition: opacity 0.6s ease;
+/* Default (hero safety) */
+section {
+  --wave-color: transparent;
 }
 
-.navbar-logo {
-  user-select: none;
-  width: 32px;
-  /* adjust */
-  height: auto;
-  display: block;
+/* Light mode */
+.content-section.primary {
+  background: var(--bg-primary);
+  --wave-color: var(--bg-secondary);
 }
 
-.ring {
-  position: absolute;
-  width: 90px;
-  height: 90px;
-  border: 5px solid transparent;
-  border-top: 5px solid #fff;
-  border-right: 5px solid #fff;
-  border-radius: 50%;
-  animation: spin 1.2s linear infinite;
+.content-section.secondary {
+  background: var(--bg-secondary);
+  --wave-color: var(--bg-primary);
+}
+
+/* Dark mode */
+body.dark .content-section.primary {
+  background: #1a1a1a;
+  --wave-color: #121212;
+}
+
+body.dark .content-section.secondary {
+  background: #121212;
+  --wave-color: #1a1a1a;
 }
 
 /* =========================
-   CURTAINS (HIDDEN INITIALLY)
-========================= */
-.curtain {
-  position: absolute;
-  top: 0;
-  width: 50%;
-  height: 100%;
-  background: #111;
-  z-index: 3;
-  transform: translateX(0);
-  opacity: 0;
-  transition:
-    transform 1.8s cubic-bezier(0.77, 0, 0.175, 1),
-    opacity 0.3s ease;
-}
-
-.curtain.left {
-  left: 0;
-}
-
-.curtain.right {
-  right: 0;
-}
-
-/* SHOW + OPEN */
-body.curtain-open .loader-center {
-  opacity: 0;
-  pointer-events: none;
-}
-
-body.curtain-open .curtain {
-  opacity: 1;
-}
-
-body.curtain-open .curtain.left {
-  transform: translateX(-100%);
-}
-
-body.curtain-open .curtain.right {
-  transform: translateX(100%);
-}
-
-/* =========================
-   SITE FADE IN
-========================= */
-.site {
-  opacity: 1;
-}
-
-/* =========================
-   FADE SECTIONS
+   FADE IN
 ========================= */
 .fade-in-section {
   opacity: 0;
@@ -336,30 +306,110 @@ body.curtain-open .curtain.right {
   transform: translateY(0);
 }
 
-/* =========================
-   ANIMATIONS
-========================= */
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes siteIn {
-  to {
-    opacity: 1;
-  }
+/* Wave must overlap hero */
+.hero-section .wave-bottom {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  z-index: 5;
 }
 
 /* =========================
-   RESET
+   SITE
 ========================= */
-html,
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  scroll-behavior: smooth;
+.site {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================
+   PRELOADER
+========================= */
+#loader-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* CENTER (LOGO + RING) */
+.loader-center {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 1002;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+/* STATIC LOGO */
+.loader-logo {
+  width: 42px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* RING (ONLY THIS SPINS) */
+.loader-ring {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 5px solid transparent;
+  border-left-color: var(--loader-ring);
+  border-bottom-color: var(--loader-ring);
+  animation: spin 1.4s linear infinite;
+}
+
+/* CURTAINS */
+#loader-wrapper .loader-section {
+  position: fixed;
+  top: -500%;
+  width: 101%;
+  height: 1000%;
+  background: var(--loader-bg);
+  z-index: 1001;
+  transform: translateX(0);
+}
+
+#loader-wrapper .section-left {
+  left: -50%;
+}
+
+#loader-wrapper .section-right {
+  right: -50%;
+}
+
+/* =========================
+   LOADED STATE
+========================= */
+body.loaded .loader-center {
+  opacity: 0;
+}
+
+body.loaded #loader-wrapper .section-left {
+  -webkit-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  transform: translateX(-100%);
+  -webkit-transition: all 1.5s 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+  -o-transition: all 1.5s 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: all 1.5s 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+body.loaded #loader-wrapper .section-right {
+  -webkit-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  transform: translateX(100%);
+  -webkit-transition: all 1.5s 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+  -o-transition: all 1.5s 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: all 1.5s 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+body.loaded #loader-wrapper {
+  visibility: hidden;
+  transition: visibility 0s 2.6s;
 }
 
 /* =========================
@@ -369,31 +419,32 @@ body {
   position: fixed;
   top: 6rem;
   right: 1.5rem;
-  z-index: 999999;
+  z-index: 99999;
   background: var(--card-bg);
   color: var(--text-main);
   padding: 15px 20px;
-  border-radius: 3px;
-  font-size: 1rem;
+  border-radius: 4px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
 }
 
 .toast.success {
-  border-left: 8px solid #22c55e;
+  border-left: 6px solid var(--toast-success);
 }
 
 .toast.error {
-  border-left: 8px solid #ef4444;
+  border-left: 6px solid var(--toast-error);
 }
 
-.toast-enter-from,
-.toast-leave-to {
-  opacity: 0;
-  transform: translateY(-12px);
-}
+/* =========================
+   ANIMATIONS
+========================= */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
 
-.toast-enter-active,
-.toast-leave-active {
-  transition: all 0.35s ease;
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

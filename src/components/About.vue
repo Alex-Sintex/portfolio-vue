@@ -153,7 +153,7 @@
 }
 
 .orbit-text {
-    fill: var(--orbit-text);
+    fill: var(--orbit-badge-text);
     font-size: 6px;
     font-weight: bold;
     text-transform: uppercase;

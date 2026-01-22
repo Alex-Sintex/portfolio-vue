@@ -309,6 +309,7 @@ onUnmounted(() => {
         display: flex;
         gap: 1rem;
         font-size: 0.95rem;
+        margin: 10px;
     }
 
     .nav-desktop a {

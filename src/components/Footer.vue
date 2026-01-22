@@ -32,7 +32,7 @@ function scrollToTop() {
 .footer {
     position: relative;
     background: var(--wave-footer-bg);
-    color: #999;
+    color: #1f1f1f;
     text-align: center;
     padding-top: 80px;
 }

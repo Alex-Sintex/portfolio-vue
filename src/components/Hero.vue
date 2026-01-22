@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const texts = [
     'Mobile developer (iOS).',
@@ -31,31 +31,26 @@ function scrollToNext() {
     const nextSection = document.querySelector('#about')
     if (!nextSection) return
 
-    const y =
-        nextSection.getBoundingClientRect().top + window.pageYOffset
-
     window.scrollTo({
-        top: y,
+        top: nextSection.offsetTop,
         behavior: 'smooth'
     })
 }
 
+/* =========================
+   TYPE EFFECT
+========================= */
 function typeEffect() {
     const currentText = texts[textIndex]
 
     if (!isDeleting) {
-        // Typing forward
         typedText.value = currentText.substring(0, charIndex + 1)
         charIndex++
 
         if (charIndex === currentText.length) {
-            // Pause before deleting
-            setTimeout(() => {
-                isDeleting = true
-            }, 1500)
+            setTimeout(() => (isDeleting = true), 1500)
         }
     } else {
-        // Deleting backward
         typedText.value = currentText.substring(0, charIndex - 1)
         charIndex--
 
@@ -65,22 +60,50 @@ function typeEffect() {
         }
     }
 
-    const speed = isDeleting ? 50 : 100 // faster delete, slower type
-    setTimeout(typeEffect, speed)
+    setTimeout(typeEffect, isDeleting ? 50 : 100)
+}
+
+/* =========================
+   HERO SCROLL EFFECT
+========================= */
+function handleScroll() {
+    // ❌ Disable on mobile & tablets
+    if (window.innerWidth <= 768) return
+
+    const hero = document.querySelector('.hero')
+    if (!hero) return
+
+    const scrollY = window.scrollY
+    const maxScroll = window.innerHeight
+
+    const progress = Math.min(scrollY / maxScroll, 1)
+
+    const scale = 120 - progress * 20
+    const posY = 50 + progress * 10
+
+    hero.style.backgroundSize = `${scale}%`
+    hero.style.backgroundPosition = `center ${posY}%`
 }
 
 onMounted(() => {
     typeEffect()
+    window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll)
 })
 </script>
 
 <style scoped>
 .hero {
-    height: 100vh;
-    background: url('@/assets/images/backgrounds/kali.jpg') center/cover no-repeat;
-    position: relative;
+    position: absolute;
+    inset: 0;
+    background-image: url('@/assets/images/backgrounds/kali.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: var(--hero-text);
-    font-family: 'Helvetica Neue', sans-serif;
 }
 
 .text-uppercase {
@@ -93,12 +116,13 @@ onMounted(() => {
 }
 
 .overlay {
+    position: absolute;
+    inset: 0;
     background-color: var(--hero-overlay);
-    height: 100%;
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
 }
 
 .intro {
@@ -224,6 +248,13 @@ onMounted(() => {
 @keyframes blink {
     50% {
         opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        background-size: cover !important;
+        background-position: center !important;
     }
 }
 </style>

@@ -242,6 +242,8 @@ body {
   scroll-behavior: smooth;
   background: var(--bg-main, #f9f9f9);
   color: var(--text-main, #1f1f1f);
+  width: 100%;
+  overflow-x: hidden;
 }
 
 body {

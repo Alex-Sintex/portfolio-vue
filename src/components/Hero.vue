@@ -58,6 +58,17 @@ function typeEffect() {
     timerId = setTimeout(typeEffect, isDeleting ? 50 : 100)
 }
 
+function scrollToNext() {
+    const nextSection = document.querySelector('#about')
+
+    if (nextSection) {
+        nextSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        })
+    }
+}
+
 // 🔹 restart animation when language changes
 watch(locale, () => {
     clearTimeout(timerId)

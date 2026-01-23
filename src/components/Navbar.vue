@@ -354,6 +354,26 @@ onUnmounted(() => {
     }
 }
 
+@media (min-width: 769px) and (max-width: 1366px) {
+
+    /* widened max-width for iPad Pro */
+    .navbar {
+        padding: 10px 0;
+    }
+
+    .navbar-container {
+        padding: 0 1rem;
+    }
+
+    .nav-desktop {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.95rem;
+        margin: 0;
+        /* remove unnecessary margin */
+    }
+}
+
 .mobile-theme-toggle {
     margin-top: 1rem;
 }

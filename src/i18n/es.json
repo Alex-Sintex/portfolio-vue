@@ -62,27 +62,27 @@
     "items": {
       "webDesign": {
         "title": "Diseño Web",
-        "description": "Creación de interfaces visuales atractivas y fáciles de usar para sitios web y aplicaciones."
+        "description": "Creación de interfaces intuitivas y atractivas, centradas en la experiencia del usuario."
       },
       "development": {
         "title": "Desarrollo",
         "description": "Construcción de aplicaciones web y móviles escalables y fáciles de mantener."
       },
-      "graphics": {
-        "title": "Diseño Gráfico",
-        "description": "Diseño de logotipos, banners y recursos visuales para plataformas digitales."
+      "branding": {
+        "title": "Branding e Identidad Visual",
+        "description": "Definición de paletas de colores, tipografía y estilos consistentes para fortalecer la identidad visual."
       },
       "responsive": {
         "title": "Diseño Responsivo",
-        "description": "Garantizando experiencias fluidas en todos los tamaños de pantalla y dispositivos."
+        "description": "Adaptación de interfaces para ofrecer experiencias fluidas en todos los dispositivos y tamaños de pantalla."
       },
-      "seo": {
-        "title": "Optimización SEO",
-        "description": "Optimización de sitios web para mejorar su visibilidad y posicionamiento en buscadores."
+      "pwa": {
+        "title": "Aplicaciones Web Progresivas",
+        "description": "Implementación de soporte offline, notificaciones push y apps instalables para una experiencia tipo app nativa."
       },
       "support": {
         "title": "Soporte",
-        "description": "Asistencia continua y actualizaciones para proyectos en producción."
+        "description": "Provisión de asistencia continua y actualizaciones para mantener los proyectos en óptimas condiciones."
       }
     }
   },

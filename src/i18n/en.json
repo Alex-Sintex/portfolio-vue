@@ -62,27 +62,27 @@
     "items": {
       "webDesign": {
         "title": "Web Design",
-        "description": "Creating visually engaging and user-friendly interfaces for websites and apps."
+        "description": "Creation of intuitive and attractive interfaces focused on user experience."
       },
       "development": {
         "title": "Development",
         "description": "Building scalable and maintainable web and mobile applications."
       },
-      "graphics": {
-        "title": "Graphic Design",
-        "description": "Designing logos, banners, and visual assets for digital platforms."
+      "branding": {
+        "title": "Branding & Visual Identity",
+        "description": "Definition of color palettes, typography, and consistent styles to strengthen visual identity."
       },
       "responsive": {
         "title": "Responsive Design",
-        "description": "Ensuring seamless experiences across all screen sizes and devices."
+        "description": "Adaptation of interfaces to deliver smooth experiences across all devices and screen sizes."
       },
-      "seo": {
-        "title": "SEO Friendly",
-        "description": "Optimizing websites for search engines to improve visibility and ranking."
+      "pwa": {
+        "title": "Progressive Web Apps",
+        "description": "Implementation of offline support, push notifications, and installable apps for a native-like experience."
       },
       "support": {
         "title": "Support",
-        "description": "Providing ongoing assistance and updates for deployed projects."
+        "description": "Providing ongoing support and updates to keep projects in optimal condition."
       }
     }
   },
@@ -129,4 +129,3 @@
     "copyright": "© 2026 Kevin Alexis. All rights reserved."
   }
 }
-

@@ -7,14 +7,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
   faCode,
   faCube,
-  faCamera,
-  faMobileScreen,
-  faThumbsUp,
+  faPalette,
+  faMobile,
+  faMobileAlt,
   faLifeRing,
 } from '@fortawesome/free-solid-svg-icons'
 
 // Add icons to the library
-library.add(faCode, faCube, faCamera, faMobileScreen, faThumbsUp, faLifeRing)
+library.add(faCode, faCube, faPalette, faMobile, faMobileAlt, faLifeRing)
 
 const app = createApp(App)
 

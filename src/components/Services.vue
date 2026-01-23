@@ -33,19 +33,19 @@ const services = computed(() => [
         description: t('services.items.development.description')
     },
     {
-        title: t('services.items.graphics.title'),
-        icon: ['fas', 'camera'],
-        description: t('services.items.graphics.description')
+        title: t('services.items.branding.title'),
+        icon: ['fas', 'palette'],
+        description: t('services.items.branding.description')
     },
     {
         title: t('services.items.responsive.title'),
-        icon: ['fas', 'mobile-screen'],
+        icon: ['fas', 'mobile'],
         description: t('services.items.responsive.description')
     },
     {
-        title: t('services.items.seo.title'),
-        icon: ['fas', 'thumbs-up'],
-        description: t('services.items.seo.description')
+        title: t('services.items.pwa.title'),
+        icon: ['fas', 'mobile-alt'],
+        description: t('services.items.pwa.description')
     },
     {
         title: t('services.items.support.title'),

@@ -54,7 +54,7 @@ const allUpdates = computed(() => [
         image: portfolio_web,
         description: t('updates.items.portfolio.description'),
         status: t('updates.status.inProgress'),
-        tech: 'Vue 3, HTML5, CSS'
+        tech: 'Vue 3, Vite, HTML5, CSS, JavaScript, i18n'
     },
     {
         id: 2,
@@ -62,7 +62,7 @@ const allUpdates = computed(() => [
         image: mootec,
         description: t('updates.items.cyber.description'),
         status: t('updates.status.completed'),
-        tech: 'Cybersecurity Basics'
+        tech: 'Curso propedéutico'
     }
 ])
 

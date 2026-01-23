@@ -3,22 +3,27 @@
         <div class="contact-header">
             <h2 class="contact-title">{{ $t('contact.title') }}</h2>
             <p class="contact-subtitle">{{ $t('contact.subtitle') }}</p>
-            <p class="contact-message">
-                {{ $t('contact.message') }}
-            </p>
+            <p class="contact-message">{{ $t('contact.message') }}</p>
         </div>
 
-        <form class="contact-form" @submit.prevent="submitForm">
+        <form class="contact-form" @submit.prevent="submitForm" novalidate>
             <div class="contact-row">
-                <input type="text" class="contact-input" :placeholder="$t('contact.form.name')" v-model="form.name"
-                    aria-label="Name" />
+                <div class="input-group">
+                    <input type="text" class="contact-input" :placeholder="$t('contact.form.name')" v-model="form.name"
+                        maxlength="50" aria-label="Name" />
+                </div>
 
-                <input type="email" class="contact-input" :placeholder="$t('contact.form.email')" v-model="form.email"
-                    aria-label="Email" />
+                <div class="input-group">
+                    <input type="email" class="contact-input" :placeholder="$t('contact.form.email')"
+                        v-model="form.email" maxlength="100" aria-label="Email" />
+                </div>
             </div>
 
-            <textarea class="contact-textarea" :placeholder="$t('contact.form.message')" v-model="form.message"
-                aria-label="Message"></textarea>
+            <div class="input-group">
+                <textarea class="contact-textarea" :placeholder="$t('contact.form.message')" v-model="form.message"
+                    maxlength="500" aria-label="Message"></textarea>
+                <small class="char-count">{{ form.message.length }}/500</small>
+            </div>
 
             <button class="contact-button" :disabled="loading">
                 {{ loading ? $t('contact.form.sending') : $t('contact.form.submit') }}
@@ -31,32 +36,62 @@
 import { ref, inject } from 'vue'
 import emailjs from '@emailjs/browser'
 
-// GLOBAL TOAST
+// --------------------
+// GLOBAL TOAST & SOUNDS
+// --------------------
 const showToast = inject('showToast')
+const successSound = new Audio('/sounds/success.mp3')
+const errorSound = new Audio('/sounds/error.mp3')
 
+// --------------------
 // FORM STATE
+// --------------------
 const form = ref({
     name: '',
     email: '',
     message: ''
 })
-
 const loading = ref(false)
 
-// SIMPLE EMAIL CHECK
+// --------------------
+// EMAIL VALIDATION
+// --------------------
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+// --------------------
+// SUBMIT FORM
+// --------------------
+const maxNameLength = 50
+const maxEmailLength = 100
+const maxMessageLength = 500
 function submitForm() {
-    if (loading.value) return
 
     // BASIC VALIDATION
-    if (!form.value.name || !form.value.email || !form.value.message) {
-        showToast('error', 'Please fill in all fields')
+    if (loading.value) return
+
+    if (form.value.name.length > maxNameLength) {
+        showToast('error', `Name cannot exceed ${maxNameLength} characters`)
+        errorSound.play()
+        return
+    } else if (form.value.email.length > maxEmailLength) {
+        showToast('error', `Email cannot exceed ${maxEmailLength} characters`)
+        errorSound.play()
+        return
+    } else if (form.value.message.length > maxMessageLength) {
+        showToast('error', `Message cannot exceed ${maxMessageLength} characters`)
+        errorSound.play()
         return
     }
 
-    if (!emailRegex.test(form.value.email)) {
+    if (!form.value.name.trim() || !form.value.email.trim() || !form.value.message.trim()) {
+        showToast('error', 'Please fill in all fields')
+        errorSound.play()
+        return
+    }
+
+    if (!emailRegex.test(form.value.email.trim())) {
         showToast('error', 'Please enter a valid email')
+        errorSound.play()
         return
     }
 
@@ -77,13 +112,16 @@ function submitForm() {
         )
         .then(() => {
             showToast('success', 'Message sent successfully ✔')
+            successSound.play()
 
+            // reset form
             form.value.name = ''
             form.value.email = ''
             form.value.message = ''
         })
         .catch(() => {
             showToast('error', 'Failed to send message ✖')
+            errorSound.play()
         })
         .finally(() => {
             loading.value = false
@@ -98,7 +136,7 @@ function submitForm() {
     background-color: var(--bg-main);
     color: var(--text-main);
     text-align: center;
-    font-family: 'Helvetica Neue', sans-serif;
+    margin: 0 auto;
 }
 
 .contact-header {
@@ -156,6 +194,19 @@ function submitForm() {
     outline: none;
 }
 
+
+.input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.contact-input:focus,
+.contact-textarea:focus {
+    border-color: var(--text-main);
+}
+
 .contact-textarea {
     padding: 0.75rem 1rem;
     background-color: var(--card-bg);
@@ -165,6 +216,13 @@ function submitForm() {
     font-size: 1rem;
     min-height: 120px;
     resize: none;
+}
+
+.char-count {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: 2px;
 }
 
 .contact-button {
@@ -244,5 +302,16 @@ function submitForm() {
 .toast-enter-active,
 .toast-leave-active {
     transition: all 0.4s ease;
+}
+
+.contact-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.contact-button:hover:not(:disabled) {
+    background-color: var(--text-highlight);
+    color: var(--bg-main);
+    border: 1px solid var(--text-highlight);
 }
 </style>

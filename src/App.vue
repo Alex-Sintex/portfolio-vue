@@ -176,6 +176,7 @@ onUnmounted(() => {
   --tool-icon-bg: #ffffff;
   --text-muted: #555;
   --text-inverse: #ffffff;
+  --text-highlight: #1f1f1f;
 
   --card-bg: #ffffff;
   --border-color: #e5e5e5;
@@ -213,6 +214,7 @@ body.dark {
   --text-main: #eaeaea;
   --tool-icon-bg: #f9fafb;
   --text-muted: #aaaaaa;
+  --text-highlight: #f9fafb;
 
   --card-bg: #1f1f1f;
   --border-color: #333;

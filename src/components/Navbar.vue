@@ -17,11 +17,16 @@
                     <li><a href="#services" :class="linkClass('services')">{{ $t('nav.services') }}</a></li>
                     <li><a href="#updates" :class="linkClass('updates')">{{ $t('nav.updates') }}</a></li>
                     <li><a href="#contact" :class="linkClass('contact')">{{ $t('nav.contact') }}</a></li>
-                    <!-- Theme toggle button -->
-                    <button class="theme-toggle" @click="toggleTheme">
-                        <img v-if="theme === 'light'" src="@/assets/icons/moon_icon.png" alt="Dark mode" class="w-5" />
-                        <img v-else src="@/assets/icons/sun_icon.png" alt="Light mode" class="w-5" />
-                    </button>
+
+                    <!-- Theme toggle inside li for alignment -->
+                    <li>
+                        <button class="theme-toggle" @click="toggleTheme">
+                            <img v-if="theme === 'light'" src="@/assets/icons/moon_icon.png" alt="Dark mode"
+                                class="w-5" />
+                            <img v-else src="@/assets/icons/sun_icon.png" alt="Light mode" class="w-5" />
+                        </button>
+                    </li>
+
                     <!-- Language switch -->
                     <li class="lang-dropdown">
                         <button class="lang-trigger" @click.stop="toggleLang">
@@ -185,6 +190,7 @@ onUnmounted(() => {
 
 .nav-list {
     display: flex;
+    align-items: center;
     gap: 1.2rem;
     list-style: none;
     margin: 0;

@@ -20,7 +20,10 @@
                         <div class="center-icon">🧑‍💻</div>
                     </div>
                 </div>
-                <img src="@/assets/images/backgrounds/background.jpg" alt="Kevin Alexis" class="profile-pic" />
+                <div class="tilt-wrapper" @mousemove="handleMove" @mouseleave="resetTilt" ref="tiltEl">
+                    <img src="@/assets/images/backgrounds/background.jpg" alt="Kevin Alexis"
+                        class="profile-pic tilt-image" />
+                </div>
             </div>
 
             <div class="right-column">
@@ -61,8 +64,46 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+
 const { t } = useI18n()
+
+const tiltEl = ref(null)
+const isTouchDevice = window.matchMedia('(pointer: coarse)').matches
+
+function handleMove(e) {
+    if (isTouchDevice) return
+
+    const el = tiltEl.value
+    const rect = el.getBoundingClientRect()
+
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    const centerX = rect.width / 2
+    const centerY = rect.height / 2
+
+    const rotateX = ((y - centerY) / centerY) * -10
+    const rotateY = ((x - centerX) / centerX) * 10
+
+    el.style.transform = `
+    perspective(800px)
+    rotateX(${rotateX}deg)
+    rotateY(${rotateY}deg)
+    scale(1.05)
+  `
+}
+
+function resetTilt() {
+    if (!tiltEl.value) return
+    tiltEl.value.style.transform = `
+    perspective(800px)
+    rotateX(0deg)
+    rotateY(0deg)
+    scale(1)
+  `
+}
 </script>
 
 <style scoped>
@@ -254,5 +295,46 @@ const { t } = useI18n()
     width: 100%;
     height: auto;
     object-fit: contain;
+}
+
+/* ------------------------
+   TILT
+------------------------ */
+.tilt-wrapper {
+    display: inline-block;
+    transition: transform 0.15s ease-out;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.tilt-image {
+    display: block;
+    border-radius: 0.75rem;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+.tilt-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at top left,
+            rgba(255, 255, 255, 0.15),
+            transparent 60%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.tilt-wrapper:hover::after {
+    opacity: 1;
+}
+
+/* Mobile / tablet fallback */
+@media (hover: none) {
+    .tilt-wrapper {
+        transform: none !important;
+    }
 }
 </style>

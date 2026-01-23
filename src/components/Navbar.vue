@@ -21,9 +21,8 @@
                     <!-- Theme toggle inside li for alignment -->
                     <li>
                         <button class="theme-toggle" @click="toggleTheme">
-                            <img v-if="theme === 'light'" src="@/assets/icons/moon_icon.png" alt="Dark mode"
-                                class="w-5" />
-                            <img v-else src="@/assets/icons/sun_icon.png" alt="Light mode" class="w-5" />
+                            <img v-if="theme === 'light'" :src="moonIcon" alt="Dark mode" class="w-5" />
+                            <img v-else :src="sunIcon" alt="Light mode" class="w-5" />
                         </button>
                     </li>
 
@@ -54,8 +53,8 @@
                     <!-- MOBILE THEME TOGGLE -->
                     <li class="mobile-theme-toggle">
                         <button @click="toggleTheme">
-                            <img v-if="theme === 'light'" src="@/assets/icons/moon_icon.png" alt="Dark mode" />
-                            <img v-else src="@/assets/icons/sun_icon.png" alt="Light mode" />
+                            <img v-if="theme === 'light'" :src="moonIcon" alt="Dark mode" />
+                            <img v-else :src="sunIcon" alt="Light mode" />
                             <span>{{ theme === 'light' ? 'Dark mode' : 'Light mode' }}</span>
                         </button>
                     </li>
@@ -77,6 +76,8 @@
 </template>
 
 <script setup>
+import moonIcon from '@/assets/icons/moon_icon.png'
+import sunIcon from '@/assets/icons/sun_icon.png'
 import { ref, onMounted, onUnmounted, inject } from 'vue'
 import { useI18n } from 'vue-i18n'
 

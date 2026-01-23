@@ -21,7 +21,7 @@
   },
   "about": {
     "title": "ABOUT ME",
-    "orbit": "FULL STACK WEB DEVELOPER • FULL STACK WEB DEVELOPER",
+    "orbit": "Full Stack Developer (Web & Mobile) - Full Stack Developer (Web & Mobile)",
     "bio": "I'm Kevin Alexis. I am a software engineer, and I'm very passionate and dedicated to programming tech solutions. With over two years of experience as a full stack developer, I've participated with leading organizations to help drive their success and growth.",
     "info": {
       "languages": {
@@ -99,11 +99,12 @@
     "items": {
       "portfolio": {
         "title": "Personal Portfolio (Vue 3)",
-        "description": "Building my personal portfolio using Vue 3."
+        "description": "Building my personal portfolio."
       },
       "cyber": {
         "title": "Cybersecurity Fundamentals",
-        "description": "Studying cybersecurity concepts."
+        "description": "Studying cybersecurity concepts.",
+        "tech": "Preparatory course"
       }
     }
   },

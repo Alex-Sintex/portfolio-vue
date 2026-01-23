@@ -62,7 +62,7 @@ const allUpdates = computed(() => [
         image: mootec,
         description: t('updates.items.cyber.description'),
         status: t('updates.status.completed'),
-        tech: 'Curso propedéutico'
+        tech: t('updates.items.cyber.tech')
     }
 ])
 

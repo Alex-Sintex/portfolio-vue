@@ -21,7 +21,7 @@
   },
   "about": {
     "title": "SOBRE MÍ",
-    "orbit": "DESARROLLADOR WEB FULL STACK • DESARROLLADOR WEB FULL STACK",
+    "orbit": "Desarrollador Full Stack (Web & Móvil) - Desarrollador Full Stack (Web & Móvil)",
     "bio": "Soy Kevin Alexis. Soy ingeniero de software y me apasiona profundamente desarrollar soluciones tecnológicas. Con más de dos años de experiencia como desarrollador full stack, he participado con organizaciones líderes para ayudar a impulsar su éxito y crecimiento.",
     "info": {
       "languages": {
@@ -103,7 +103,8 @@
       },
       "cyber": {
         "title": "Fundamentos de Ciberseguridad",
-        "description": "Estudiando conceptos fundamentales de ciberseguridad."
+        "description": "Estudiando conceptos fundamentales de ciberseguridad.",
+        "tech": "Curso propedéutico"
       }
     }
   },

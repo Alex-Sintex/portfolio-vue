@@ -18,7 +18,7 @@
                     <li><a href="#updates" :class="linkClass('updates')">{{ $t('nav.updates') }}</a></li>
                     <li><a href="#contact" :class="linkClass('contact')">{{ $t('nav.contact') }}</a></li>
 
-                    <!-- Theme toggle inside li for alignment -->
+                    <!-- Theme toggle -->
                     <li>
                         <button class="theme-toggle" @click="toggleTheme">
                             <img v-if="theme === 'light'" :src="moonIcon" alt="Dark mode" class="w-5" />
@@ -26,14 +26,13 @@
                         </button>
                     </li>
 
-                    <!-- Language switch -->
+                    <!-- Desktop language dropdown -->
                     <li class="lang-dropdown">
-                        <button class="lang-trigger" @click.stop="toggleLang">
+                        <button class="lang-trigger" @click.stop="toggleLangDesktop">
                             {{ locale.toUpperCase() }}
                             <span class="caret">▾</span>
                         </button>
-
-                        <ul v-if="langOpen" class="lang-menu">
+                        <ul v-if="langOpenDesktop" class="lang-menu">
                             <li @click="changeLang('en')">English</li>
                             <li @click="changeLang('es')">Español</li>
                         </ul>
@@ -50,7 +49,8 @@
                     <li><a href="#services" @click="toggleMobileMenu">Services</a></li>
                     <li><a href="#updates" @click="toggleMobileMenu">Updates</a></li>
                     <li><a href="#contact" @click="toggleMobileMenu">Contact</a></li>
-                    <!-- MOBILE THEME TOGGLE -->
+
+                    <!-- Mobile theme toggle -->
                     <li class="mobile-theme-toggle">
                         <button @click="toggleTheme">
                             <img v-if="theme === 'light'" :src="moonIcon" alt="Dark mode" />
@@ -58,13 +58,13 @@
                             <span>{{ theme === 'light' ? 'Dark mode' : 'Light mode' }}</span>
                         </button>
                     </li>
-                    <!-- MOBILE LANGUAGE SWITCH -->
-                    <li class="mobile-lang-toggle">
-                        <button @click="toggleLang">
-                            🌐 {{ locale.toUpperCase() }}
-                        </button>
 
-                        <ul v-if="langOpen" class="mobile-lang-menu">
+                    <!-- Mobile language dropdown -->
+                    <li class="mobile-lang-toggle">
+                        <button @click.stop="toggleLangMobile">
+                            {{ locale.toUpperCase() }}
+                        </button>
+                        <ul v-if="langOpenMobile" class="mobile-lang-menu">
                             <li @click="changeLang('en')">English</li>
                             <li @click="changeLang('es')">Español</li>
                         </ul>
@@ -82,21 +82,27 @@ import { ref, onMounted, onUnmounted, inject } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { locale } = useI18n()
-const langOpen = ref(false)
 const theme = inject('theme')
 const setTheme = inject('setTheme')
+
+// Active scroll section
 const activeSection = ref('home')
 const scrolled = ref(false)
 const isMobileMenuOpen = ref(false)
 
-function toggleLang() {
-    langOpen.value = !langOpen.value
-}
+// Dropdown states
+const langOpenDesktop = ref(false)
+const langOpenMobile = ref(false)
+
+// Toggle functions
+function toggleLangDesktop() { langOpenDesktop.value = !langOpenDesktop.value }
+function toggleLangMobile() { langOpenMobile.value = !langOpenMobile.value }
 
 function changeLang(lang) {
     locale.value = lang
     localStorage.setItem('lang', lang)
-    langOpen.value = false
+    langOpenDesktop.value = false
+    langOpenMobile.value = false
     isMobileMenuOpen.value = false
 }
 
@@ -131,23 +137,29 @@ function linkClass(id) {
     ]
 }
 
-// 👇 Trigger update on scroll AND on hashchange (clicking anchor links)
+// Handle clicks outside dropdowns
 onMounted(() => {
-    window.addEventListener('scroll', updateActiveSection)
-    window.addEventListener('hashchange', updateActiveSection)
-    updateActiveSection() // initial check
-
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     theme.value = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light')
 
-    document.addEventListener('click', () => {
-        langOpen.value = false
-    })
-})
+    const handleClickOutside = (e) => {
+        const desktop = document.querySelector('.lang-dropdown')
+        if (desktop && !desktop.contains(e.target)) langOpenDesktop.value = false
 
-onUnmounted(() => {
-    window.removeEventListener('scroll', updateActiveSection)
-    window.removeEventListener('hashchange', updateActiveSection)
+        const mobile = document.querySelector('.mobile-lang-toggle')
+        if (mobile && !mobile.contains(e.target)) langOpenMobile.value = false
+    }
+
+    document.addEventListener('click', handleClickOutside)
+    window.addEventListener('scroll', updateActiveSection)
+    window.addEventListener('hashchange', updateActiveSection)
+    updateActiveSection()
+
+    onUnmounted(() => {
+        document.removeEventListener('click', handleClickOutside)
+        window.removeEventListener('scroll', updateActiveSection)
+        window.removeEventListener('hashchange', updateActiveSection)
+    })
 })
 </script>
 

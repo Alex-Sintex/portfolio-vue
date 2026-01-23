@@ -7,14 +7,15 @@
                     <div class="orbit-badge">
                         <svg viewBox="0 0 100 100" class="orbit-svg">
                             <defs>
-                                <!-- Circle path centered at (50,50) radius 40 -->
                                 <path id="circlePath" d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0" />
                             </defs>
-                            <text class="orbit-text">
-                                <textPath href="#circlePath">
-                                    {{ t('about.orbit') }}
-                                </textPath>
-                            </text>
+                            <g class="orbit-group">
+                                <text class="orbit-text" dominant-baseline="middle" text-anchor="middle">
+                                    <textPath href="#circlePath">
+                                        {{ t('about.orbit') }}
+                                    </textPath>
+                                </text>
+                            </g>
                         </svg>
                         <div class="center-icon">🧑‍💻</div>
                     </div>
@@ -23,25 +24,20 @@
             </div>
 
             <div class="right-column">
-                <p class="bio">
-                    {{ t('about.bio') }}
-                </p>
-
+                <p class="bio">{{ t('about.bio') }}</p>
                 <div class="info-boxes">
                     <div class="info-box">
-                        <img class="img" src="@/assets/icons/code-icon.png" alt="code">
+                        <img class="img" src="@/assets/icons/code-icon.png" alt="code" />
                         <h3>{{ t('about.info.languages.title') }}</h3>
                         <p v-html="t('about.info.languages.value').replace(/\n/g, '<br />')"></p>
                     </div>
-
                     <div class="info-box">
-                        <img class="img" src="@/assets/icons/edu-icon.png" alt="edu">
+                        <img class="img" src="@/assets/icons/edu-icon.png" alt="edu" />
                         <h3>{{ t('about.info.education.title') }}</h3>
                         <p>{{ t('about.info.education.value') }}</p>
                     </div>
-
                     <div class="info-box">
-                        <img class="img" src="@/assets/icons/project-icon.png" alt="project">
+                        <img class="img" src="@/assets/icons/project-icon.png" alt="project" />
                         <h3>{{ t('about.info.projects.title') }}</h3>
                         <p>{{ t('about.info.projects.value') }}</p>
                     </div>
@@ -66,7 +62,6 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
-
 const { t } = useI18n()
 </script>
 
@@ -154,12 +149,11 @@ const { t } = useI18n()
 
 .orbit-text {
     fill: var(--orbit-badge-text);
-    font-size: 6px;
+    font-size: 0.5rem;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
     transform-origin: 50% 50%;
-    /* center of SVG */
     animation: spinText 10s linear infinite;
 }
 

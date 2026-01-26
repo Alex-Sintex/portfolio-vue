@@ -21,10 +21,10 @@
                 ‹
             </button>
 
-            <div class="carousel-window">
+            <div class="carousel-window" @touchstart="onTouchStart" @touchend="onTouchEnd">
                 <div class="carousel-track" :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
                     <div v-for="(item, i) in filteredProjects" :key="item.title" class="carousel-item"
-                        @click="showLightbox(i)">
+                        @click.stop="showLightbox(i)">
                         <img :src="item.image" :alt="item.title" loading="lazy" />
                         <h3>{{ item.title }}</h3>
                     </div>
@@ -39,7 +39,7 @@
 
         <!-- LIGHTBOX (lazy loaded) -->
         <VueEasyLightbox v-if="visible" :visible="visible" :imgs="filteredProjects.map(p => p.image)" :index="index"
-            @hide="visible = false" />
+            :scroll-disabled="true" @hide="visible = false" />
     </section>
 </template>
 
@@ -110,6 +110,20 @@ const filteredProjects = computed(() => {
 const currentIndex = ref(0)
 const visible = ref(false)
 const index = ref(0)
+
+let startX = 0
+
+function onTouchStart(e) {
+    startX = e.touches[0].clientX
+}
+
+function onTouchEnd(e) {
+    const endX = e.changedTouches[0].clientX
+    const diff = startX - endX
+
+    if (diff > 50) nextProject()
+    if (diff < -50) prevProject()
+}
 
 function nextProject() {
     if (currentIndex.value < filteredProjects.value.length - 1) {
@@ -259,6 +273,14 @@ function showLightbox(i) {
 
     .section-title {
         font-size: 2rem;
+    }
+
+    .carousel-window {
+        width: 100%;
+    }
+
+    .nav-arrow {
+        display: none;
     }
 }
 </style>

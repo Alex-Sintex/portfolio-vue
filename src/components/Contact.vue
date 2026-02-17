@@ -34,12 +34,14 @@
 
 <script setup>
 import { ref, inject } from 'vue'
+import { useI18n } from 'vue-i18n'
 import emailjs from '@emailjs/browser'
 
 // --------------------
 // GLOBAL TOAST & SOUNDS
 // --------------------
 const showToast = inject('showToast')
+const { t } = useI18n()
 const successSound = new Audio('/sounds/success.mp3')
 const errorSound = new Audio('/sounds/error.mp3')
 
@@ -70,27 +72,27 @@ function submitForm() {
     if (loading.value) return
 
     if (form.value.name.length > maxNameLength) {
-        showToast('error', `Name cannot exceed ${maxNameLength} characters`)
+        showToast('error', t('contact.toast.maxName', { max: maxNameLength }))
         errorSound.play()
         return
     } else if (form.value.email.length > maxEmailLength) {
-        showToast('error', `Email cannot exceed ${maxEmailLength} characters`)
+        showToast('error', t('contact.toast.maxEmail', { max: maxEmailLength }))
         errorSound.play()
         return
     } else if (form.value.message.length > maxMessageLength) {
-        showToast('error', `Message cannot exceed ${maxMessageLength} characters`)
+        showToast('error', t('contact.toast.maxMessage', { max: maxMessageLength }))
         errorSound.play()
         return
     }
 
     if (!form.value.name.trim() || !form.value.email.trim() || !form.value.message.trim()) {
-        showToast('error', 'Please fill in all fields')
+        showToast('error', t('contact.toast.required'))
         errorSound.play()
         return
     }
 
     if (!emailRegex.test(form.value.email.trim())) {
-        showToast('error', 'Please enter a valid email')
+        showToast('error', t('contact.toast.invalidEmail'))
         errorSound.play()
         return
     }
@@ -111,7 +113,7 @@ function submitForm() {
             import.meta.env.VITE_EMAILJS_PUBLIC_KEY
         )
         .then(() => {
-            showToast('success', 'Message sent successfully ✔')
+            showToast('success', t('contact.toast.success'))
             successSound.play()
 
             // reset form
@@ -120,7 +122,7 @@ function submitForm() {
             form.value.message = ''
         })
         .catch(() => {
-            showToast('error', 'Failed to send message ✖')
+            showToast('error', t('contact.toast.error'))
             errorSound.play()
         })
         .finally(() => {

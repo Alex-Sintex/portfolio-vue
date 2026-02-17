@@ -122,6 +122,9 @@
     "toast": {
       "required": "Por favor completa todos los campos",
       "invalidEmail": "Ingresa un correo válido",
+      "maxName": "El nombre no puede superar los {max} caracteres",
+      "maxEmail": "El correo no puede superar los {max} caracteres",
+      "maxMessage": "El mensaje no puede superar los {max} caracteres",
       "success": "Mensaje enviado correctamente ✔",
       "error": "Error al enviar el mensaje ✖"
     }
